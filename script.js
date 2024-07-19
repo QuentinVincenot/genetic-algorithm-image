@@ -7,12 +7,12 @@ let ITERATIONS = 0;
 
 
 // Retrieve the button to start the animation
-const start_button = document.getElementById('startButton');
+const start_button = document.getElementById('start_button');
 
 // Add an event listener on the 'Start' button to begin the animation
 start_button.addEventListener('click', () => {
     start_button.disabled = true;
-    updateCanvas('myCanvas');
+    updateCanvas('solution_image_canvas');
 });
 
 
@@ -42,7 +42,7 @@ function updateCanvas(canvasId) {
         const random_image_solution = new Solution(IMAGE_WIDTH, IMAGE_HEIGHT);
         drawImageSolution(canvasId, random_image_solution);
         if(ITERATIONS < 10) {
-            setTimeout(() => {updateCanvas('myCanvas')}, 50);
+            setTimeout(() => {updateCanvas('solution_image_canvas')}, 50);
         } else {
             start_button.disabled = false;
             ITERATIONS = 0;
@@ -53,6 +53,6 @@ function updateCanvas(canvasId) {
 
 const random_image_solution = new Solution(IMAGE_WIDTH, IMAGE_HEIGHT);
 
-drawImageSolution('myCanvas', random_image_solution);
+drawImageSolution('solution_image_canvas', random_image_solution);
 
 
