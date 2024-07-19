@@ -28,39 +28,48 @@ file_image_input.addEventListener('change', (event) => {
         // Load the selected image and retrieve its dimensions
         const loaded_image = new Image();
         loaded_image.onload = function() {
+            
+            // Initialize variables to be computed depending on the image/canvas bounds difference
+            let new_canvas_width = MAX_WIDTH;
+            let new_canvas_height = MAX_HEIGHT;
+            let resize_factor = 1.0;
+            let new_image_width = loaded_image.width;
+            let new_image_height = loaded_image.height;
+
             // If one of the dimension of the loaded image goes out of canvas bounds, we need to resize the image
             if(loaded_image.width > MAX_WIDTH || loaded_image.height > MAX_HEIGHT) {
-                // Initialize variables to be computed depending on the image/canvas bounds difference
-                let resize_factor = 1.0;
-                let new_width = loaded_image.width;
-                let new_height = loaded_image.height;
 
-                // Determine how we should resize the loaded image depending on the canvas bounds
-                if(loaded_image.width >= loaded_image.height) {
-                    // First case : the image is wide long, the highest resize is to be done by width
+                let diff_width_canvas_image = loaded_image.width - MAX_WIDTH;
+                let diff_height_canvas_image = loaded_image.height - MAX_HEIGHT;
+                if(diff_width_canvas_image >= diff_height_canvas_image) {
+                    // First case : the image is wider out of bounds, the highest resize is to be done to fit canvas width
                     resize_factor = MAX_WIDTH / loaded_image.width;
-                    new_width = resize_factor * loaded_image.width;
-                    new_height = resize_factor * loaded_image.height;
+                    new_image_width = MAX_WIDTH;
+                    new_image_height = resize_factor * loaded_image.height;
                 } else {
-                    // Second case : the image is high long, the highest resize is to be done by height
+                    // First case : the image is higher out of bounds, the highest resize is to be done to fit canvas height
                     resize_factor = MAX_HEIGHT / loaded_image.height;
-                    new_width = resize_factor * loaded_image.width;
-                    new_height = resize_factor * loaded_image.height;
+                    new_image_width = resize_factor * loaded_image.width;
+                    new_image_height = MAX_HEIGHT;
                 }
 
                 // Resize the canvas bounds after sizes difference computation
-                original_image_canvas.width = new_width;
+                /*original_image_canvas.width = new_width;
                 original_image_canvas.height = new_height;
                 solution_image_canvas.width = new_width;
-                solution_image_canvas.height = new_height;
+                solution_image_canvas.height = new_height;*/
             }
+
+            // 
+            let difference_in_width = new_canvas_width - new_image_width;
+            let difference_in_height = new_canvas_height - new_image_height;
             
             // 
             IMAGE_WIDTH = original_image_canvas.width;
             IMAGE_HEIGHT = original_image_canvas.height;
 
             // Resize the image to the right dimensions
-            original_image_context.drawImage(loaded_image, 0, 0, original_image_canvas.width, original_image_canvas.height);
+            original_image_context.drawImage(loaded_image, 0, 0, 0.5*difference_in_width + new_image_width, 0.5*difference_in_height + new_image_height);
 
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
