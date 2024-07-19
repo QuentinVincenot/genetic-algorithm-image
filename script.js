@@ -36,6 +36,7 @@ file_image_input.addEventListener('change', (event) => {
         const loaded_image = new Image();
         loaded_image.onload = function() {
 
+            // Determine whether the new image is wider or longer than the canvas
             let image_wider_than_canvas = (loaded_image.width > MAX_WIDTH);
             let image_longer_than_canvas = (loaded_image.height > MAX_HEIGHT);
 
@@ -49,6 +50,27 @@ file_image_input.addEventListener('change', (event) => {
 
                 // Display the image at the right position in the canvas
                 original_image_context.drawImage(loaded_image, start_x, start_y, loaded_image.width, loaded_image.height);
+            }
+            else if(image_wider_than_canvas && image_longer_than_canvas) {
+                // Clear the canvas before displaying the new image
+                original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
+
+                // Compute differences in width and height between the canvas and the new image
+                let diff_width_canvas_image = loaded_image.width - MAX_WIDTH;
+                let diff_height_canvas_image = loaded_image.height - MAX_HEIGHT;
+
+                let resize_factor = 1.0;
+                if(diff_width_canvas_image >= diff_height_canvas_image) {
+                    resize_factor = MAX_WIDTH / loaded_image.width;
+                    new_image_width = MAX_WIDTH;
+                    new_image_height = resize_factor * loaded_image.height;
+
+                    // Display the image at the right position in the canvas
+                    original_image_context.drawImage(loaded_image, 0, 0, new_image_width, new_image_height);
+                }
+                /*else {
+
+                }*/
             }
 
             
