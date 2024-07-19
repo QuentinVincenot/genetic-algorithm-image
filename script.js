@@ -1,4 +1,4 @@
-import { Solution } from "./genetic_algorithm.js";
+import { ImageSolution } from "./genetic_algorithm.js";
 import { draw_solution_image_in_canvas } from "./canvas.js";
 
 
@@ -19,26 +19,25 @@ const start_button = document.getElementById('start_button');
 // Add an event listener on the 'Start' button to begin the animation
 start_button.addEventListener('click', () => {
     start_button.disabled = true;
-    updateCanvas('solution_image_canvas');
+    updateCanvas();
 });
 
 
 
 // Function to update the canvas every iteration, every set amount of time
-function updateCanvas(canvasId) {
+function updateCanvas() {
     setTimeout(() => {
         // Increase the number of iterations of the genetic algorithm as a counter
         ITERATIONS++; console.log('Updating iteration', ITERATIONS);
 
         // Create a completely random solution for the genetic algorithm
-        const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
+        const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
         // Draw the image on the second canvas, for comparison with the original image
-        //drawImageSolution(canvasId, random_image_solution);
         draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 
         if(ITERATIONS < 10) {
             // Launch the next iteration of the algorithm
-            setTimeout(() => {updateCanvas('solution_image_canvas')}, 50);
+            setTimeout(() => {updateCanvas()}, 50);
         } else {
             // Stop the algorithm after a certain number of iterations
             start_button.disabled = false;
@@ -50,7 +49,7 @@ function updateCanvas(canvasId) {
 
 
 // Create a completely random solution for the genetic algorithm
-const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
+const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
 
 // Draw the image on the second canvas, for comparison with the original image
 draw_solution_image_in_canvas(solution_image_context, random_image_solution);

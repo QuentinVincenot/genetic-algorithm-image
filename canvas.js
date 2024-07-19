@@ -1,3 +1,5 @@
+import { ImageSolution } from "./genetic_algorithm.js";
+
 export { draw_solution_image_in_canvas };
 
 
@@ -100,7 +102,7 @@ file_image_input.addEventListener('change', (event) => {
     reader.readAsDataURL(file);
 
     // Create a completely random solution for the genetic algorithm when the original image is changed
-    const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
+    const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
     // Draw the image on the second canvas, for comparison with the original image
     draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 });
