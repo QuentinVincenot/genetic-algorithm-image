@@ -1,8 +1,8 @@
 import { Solution } from "./genetic_algorithm.js";
 
 
-const IMAGE_WIDTH = 500;
-const IMAGE_HEIGHT = 375;
+let IMAGE_WIDTH = 500;
+let IMAGE_HEIGHT = 375;
 let ITERATIONS = 0;
 
 
