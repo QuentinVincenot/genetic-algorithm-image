@@ -14,8 +14,8 @@
     margin-top: 5px;
 }
 
-/* Configuration of application buttons layout */
-.buttons_container, .canvas_container {
+/* Configuration of application buttons, canvas and legends containers layouts */
+.buttons_container, .canvas_container, .legends_container {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
@@ -31,4 +31,15 @@
 /* Configuration of the canvas outer borders aspect */
 #original_image_canvas, #solution_image_canvas {
     border: solid #ccc 1px;
+}
+
+/* Configuration of the canvas images legends */
+.legends_container div {
+    float: left;
+    width: 500px;
+    height: 25px;
+    line-height: 25px;
+    font-weight: bold;
+    margin-top: -5px;
+    text-align: center;
 }

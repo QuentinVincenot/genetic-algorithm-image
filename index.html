@@ -35,11 +35,17 @@
             <canvas id="solution_image_canvas" width="500" height="400"></canvas>
         </div>
 
+        <!-- Container to integrate legends under the canvas (for original and solution images) -->
+        <div class="legends_container">
+            <div>Original image</div>
+            <div id="best_solution_legend">Best solution image : fitness = ???</div>
+        </div>
+
     </div>
 
     <!-- Application footer dedicated space, for explanations, information and credits -->
     <div class="application_footer">
-        This application tried to rebuild a target image starting from random noise.
+        This application tries to rebuild a target image starting from random noise.
         It uses a genetic algorithm to build images samples and get closer iteration by iteration.<br />
         This application was built only for fun and for personal experiment.
         This is a realization of <b><i>Quentin VINCENOT</i></b>.
