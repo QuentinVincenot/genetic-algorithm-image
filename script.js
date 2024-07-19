@@ -24,7 +24,7 @@ file_image_input.addEventListener('change', (event) => {
             // 
             original_image_context.drawImage(img, 0, 0);
             // 
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
             const pixels = imageData.data;
             console.log(pixels.length);
         };
