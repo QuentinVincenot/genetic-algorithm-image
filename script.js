@@ -28,8 +28,24 @@ file_image_input.addEventListener('change', (event) => {
         // Load the selected image and retrieve its dimensions
         const loaded_image = new Image();
         loaded_image.onload = function() {
+
+            let image_wider_than_canvas = (loaded_image.width > MAX_WIDTH);
+            let image_longer_than_canvas = (loaded_image.height > MAX_HEIGHT);
+
+            if(!image_wider_than_canvas && !image_longer_than_canvas) {
+                // Clear the canvas before displaying the new image
+                original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
+                
+                // Find the position where to display the new image at the center
+                let start_x = (MAX_WIDTH - loaded_image.width) / 2;
+                let start_y = (MAX_HEIGHT - loaded_image.height) / 2;
+
+                // Display the image at the right position in the canvas
+                original_image_context.drawImage(loaded_image, 0, 0, loaded_image.width, loaded_image.height);
+            }
+
             
-            // Initialize variables to be computed depending on the image/canvas bounds difference
+            /*// Initialize variables to be computed depending on the image/canvas bounds difference
             let new_canvas_width = MAX_WIDTH;
             let new_canvas_height = MAX_HEIGHT;
             let resize_factor = 1.0;
@@ -55,23 +71,23 @@ file_image_input.addEventListener('change', (event) => {
                 }
 
                 // Resize the canvas bounds after sizes difference computation
-                /*original_image_canvas.width = new_width;
+                original_image_canvas.width = new_width;
                 original_image_canvas.height = new_height;
                 solution_image_canvas.width = new_width;
-                solution_image_canvas.height = new_height;*/
-            }
+                solution_image_canvas.height = new_height;
+            }*/
 
             // 
             //let difference_in_width = new_canvas_width - new_image_width;
             //let difference_in_height = new_canvas_height - new_image_height;
             
             // 
-            IMAGE_WIDTH = original_image_canvas.width;
+            /*IMAGE_WIDTH = original_image_canvas.width;
             IMAGE_HEIGHT = original_image_canvas.height;
 
             // Resize the image to the right dimensions
             original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
-            original_image_context.drawImage(loaded_image, 0.5*diff_width_canvas_image, 0.5*diff_height_canvas_image, new_image_width, new_image_height);
+            original_image_context.drawImage(loaded_image, 0.5*diff_width_canvas_image, 0.5*diff_height_canvas_image, new_image_width, new_image_height);*/
 
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
