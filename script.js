@@ -3,7 +3,11 @@ import { Solution } from "./genetic_algorithm.js";
 
 let IMAGE_WIDTH = 500;
 let IMAGE_HEIGHT = 375;
+
 let ITERATIONS = 0;
+
+let MAX_WIDTH = 500;
+let MAX_HEIGHT = 400;
 
 
 // 
@@ -21,27 +25,56 @@ file_image_input.addEventListener('change', (event) => {
     const reader = new FileReader();
 
     reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-            //
-            original_image_canvas.width = img.width;
-            original_image_canvas.height = img.height;
-            solution_image_canvas.width = img.width;
-            solution_image_canvas.height = img.height;
-            IMAGE_WIDTH = img.width;
-            IMAGE_HEIGHT = img.height;
+        // Load the selected image and retrieve its dimensions
+        const loaded_image = new Image();
+        loaded_image.onload = function() {
+            // If one of the dimension of the loaded image goes out of canvas bounds, we need to resize the image
+            if(loaded_image.width > MAX_WIDTH || loaded_image.height > MAX_HEIGHT) {
+                // Initialize variables to be computed depending on the image/canvas bounds difference
+                let resize_factor = 1.0;
+                let new_width = loaded_image.width;
+                let new_height = loaded_image.height;
+
+                // Determine how we should resize the loaded image depending on the canvas bounds
+                if(loaded_image.width >= loaded_image.height) {
+                    // First case : the image is wide long, the highest resize is to be done by width
+                    resize_factor = MAX_WIDTH / loaded_image.width;
+                    new_width = resize_factor * loaded_image.width;
+                    new_height = resize_factor * loaded_image.height;
+                } else {
+                    // Second case : the image is high long, the highest resize is to be done by height
+                    resize_factor = MAX_HEIGHT / loaded_image.height;
+                    new_width = resize_factor * loaded_image.width;
+                    new_height = resize_factor * loaded_image.height;
+                }
+
+                // Resize the canvas bounds after sizes difference computation
+                original_image_canvas.width = new_width;
+                original_image_canvas.height = new_height;
+                solution_image_canvas.width = new_width;
+                solution_image_canvas.height = new_height;
+            }
+            
             // 
-            original_image_context.drawImage(img, 0, 0);
+            IMAGE_WIDTH = original_image_canvas.width;
+            IMAGE_HEIGHT = original_image_canvas.height;
+
+            // Resize the image to the right dimensions
+            original_image_context.drawImage(loaded_image, 0, 0, original_image_canvas.width, original_image_canvas.height);
+
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
             const pixels = imageData.data;
             console.log(pixels.length / 4);
         };
-        img.src = e.target.result;
+        loaded_image.src = e.target.result;
     };
 
     reader.readAsDataURL(file);
 })
+
+
+
 
 
 // Retrieve the button to start the animation
