@@ -7,7 +7,7 @@ function difference_between_images(image1_clamped_array, image2_clamped_array) {
     let image2_values = Array.from(image2_clamped_array);
 
     // Compute the difference between each pixel-dimension element-wise and return the difference array
-    let difference_array = image1_values.map((e,i) => e - image2_values[i]);
+    let difference_array = image1_values.map((e,i) => Math.abs(e - image2_values[i]));
     return difference_array;
 }
 
