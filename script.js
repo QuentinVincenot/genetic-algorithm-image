@@ -1,30 +1,29 @@
 import { Solution } from "./genetic_algorithm.js";
 
 
-let IMAGE_WIDTH = 500;
-let IMAGE_HEIGHT = 375;
-
-let ITERATIONS = 0;
-
+// Canvas size configuration constants
 let MAX_WIDTH = 500;
 let MAX_HEIGHT = 400;
 
 
-// 
-const file_image_input = document.getElementById('file_image_input');
-
+// Retrieve the original and the solution image canvas and respective contexts
 const original_image_canvas = document.getElementById('original_image_canvas');
 const original_image_context = original_image_canvas.getContext('2d');
-
 const solution_image_canvas = document.getElementById('solution_image_canvas');
+const solution_image_context = solution_image_canvas.getContext('2d');
 
-//
+// Initialize the canvas sizes to the configured ones
 original_image_canvas.width = MAX_WIDTH;
 original_image_canvas.height = MAX_HEIGHT;
 solution_image_canvas.width = MAX_WIDTH;
 solution_image_canvas.height = MAX_HEIGHT;
 
+// 
+let ITERATIONS = 0;
 
+
+// Retrieve the file input element that permits to change the image displayed in the canvas
+const file_image_input = document.getElementById('file_image_input');
 
 // 
 file_image_input.addEventListener('change', (event) => {
@@ -93,54 +92,8 @@ file_image_input.addEventListener('change', (event) => {
                     original_image_context.drawImage(loaded_image, start_x, 0, new_image_width, new_image_height);
                 }
             }
-            
 
-            
-            /*// Initialize variables to be computed depending on the image/canvas bounds difference
-            let new_canvas_width = MAX_WIDTH;
-            let new_canvas_height = MAX_HEIGHT;
-            let resize_factor = 1.0;
-            let new_image_width = loaded_image.width;
-            let new_image_height = loaded_image.height;
-
-            let diff_width_canvas_image = loaded_image.width - MAX_WIDTH;
-            let diff_height_canvas_image = loaded_image.height - MAX_HEIGHT;
-
-            // If one of the dimension of the loaded image goes out of canvas bounds, we need to resize the image
-            if(loaded_image.width > MAX_WIDTH || loaded_image.height > MAX_HEIGHT) {
-
-                if(diff_width_canvas_image >= diff_height_canvas_image) {
-                    // First case : the image is wider out of bounds, the highest resize is to be done to fit canvas width
-                    resize_factor = MAX_WIDTH / loaded_image.width;
-                    new_image_width = MAX_WIDTH;
-                    new_image_height = resize_factor * loaded_image.height;
-                } else {
-                    // First case : the image is higher out of bounds, the highest resize is to be done to fit canvas height
-                    resize_factor = MAX_HEIGHT / loaded_image.height;
-                    new_image_width = resize_factor * loaded_image.width;
-                    new_image_height = MAX_HEIGHT;
-                }
-
-                // Resize the canvas bounds after sizes difference computation
-                original_image_canvas.width = new_width;
-                original_image_canvas.height = new_height;
-                solution_image_canvas.width = new_width;
-                solution_image_canvas.height = new_height;
-            }*/
-
-            // 
-            //let difference_in_width = new_canvas_width - new_image_width;
-            //let difference_in_height = new_canvas_height - new_image_height;
-            
-            // 
-            /*IMAGE_WIDTH = original_image_canvas.width;
-            IMAGE_HEIGHT = original_image_canvas.height;
-
-            // Resize the image to the right dimensions
-            original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
-            original_image_context.drawImage(loaded_image, 0.5*diff_width_canvas_image, 0.5*diff_height_canvas_image, new_image_width, new_image_height);*/
-
-            // 
+            // Retrieve the pixels from the image displayed in the canvas
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
             const pixels = imageData.data;
             console.log(pixels.length / 4);
@@ -188,7 +141,7 @@ function updateCanvas(canvasId) {
     setTimeout(() => {
         ITERATIONS++;
         console.log('Updating iteration', ITERATIONS);
-        const random_image_solution = new Solution(IMAGE_WIDTH, IMAGE_HEIGHT);
+        const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
         drawImageSolution(canvasId, random_image_solution);
         if(ITERATIONS < 10) {
             setTimeout(() => {updateCanvas('solution_image_canvas')}, 50);
@@ -200,8 +153,10 @@ function updateCanvas(canvasId) {
 }
 
 
-const random_image_solution = new Solution(IMAGE_WIDTH, IMAGE_HEIGHT);
+// Create a completely random solution for the genetic algorithm
+const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
 
+// Draw the image on the second canvas, for comparison with the original image
 drawImageSolution('solution_image_canvas', random_image_solution);
 
 
