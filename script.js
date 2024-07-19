@@ -6,6 +6,35 @@ const IMAGE_HEIGHT = 375;
 let ITERATIONS = 0;
 
 
+// 
+const file_image_input = document.getElementById('file_image_input');
+
+const original_image_canvas = document.getElementById('original_image_canvas')
+const original_image_context = original_image_canvas.getContext('2d');
+
+
+// 
+file_image_input.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            // 
+            original_image_context.drawImage(img, 0, 0);
+            // 
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const pixels = imageData.data;
+            console.log(pixels.length);
+        };
+        img.src = e.target.result;
+    };
+
+    reader.readAsDataURL(file);
+})
+
+
 // Retrieve the button to start the animation
 const start_button = document.getElementById('start_button');
 
