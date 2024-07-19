@@ -73,9 +73,19 @@ file_image_input.addEventListener('change', (event) => {
                     // Display the image at the right position in the canvas
                     original_image_context.drawImage(loaded_image, 0, start_y, new_image_width, new_image_height);
                 }
-                /*else {
+                else {
+                    resize_factor = MAX_HEIGHT / loaded_image.height;
+                    let new_image_width = resize_factor * loaded_image.width;
+                    let new_image_height = MAX_HEIGHT;
 
-                }*/
+                    let start_x = 0;
+                    if(new_image_width < MAX_WIDTH) {
+                        start_x = (MAX_WIDTH - new_image_width) / 2;
+                    }
+
+                    // Display the image at the right position in the canvas
+                    original_image_context.drawImage(loaded_image, start_x, 0, new_image_width, new_image_height);
+                }
             }
 
             
