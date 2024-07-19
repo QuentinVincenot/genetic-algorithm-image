@@ -47,7 +47,7 @@ function updateCanvas() {
         const original_pixels = original_image_data.data;
         console.log('Original', original_pixels.length / 4);
 
-        const solution_image_data = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
+        const solution_image_data = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height);
         const solution_pixels = solution_image_data.data;
         console.log('Solution', solution_pixels.length / 4);
 
