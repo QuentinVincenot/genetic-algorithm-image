@@ -18,6 +18,13 @@ const original_image_context = original_image_canvas.getContext('2d');
 
 const solution_image_canvas = document.getElementById('solution_image_canvas');
 
+//
+original_image_canvas.width = MAX_WIDTH;
+original_image_canvas.height = MAX_HEIGHT;
+solution_image_canvas.width = MAX_WIDTH;
+solution_image_canvas.height = MAX_HEIGHT;
+
+
 
 // 
 file_image_input.addEventListener('change', (event) => {
