@@ -11,6 +11,10 @@ class ImageSolution {
             )
         );
     }
+
+    evaluate_fitness(target_solution) {
+        return -1;
+    }
 }
 
 class ImagePopulation {
