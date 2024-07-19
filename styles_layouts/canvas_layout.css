@@ -1,0 +1,29 @@
+/*--------------------------------------------------------------------------------
+----- Global page configuration
+--------------------------------------------------------------------------------*/
+
+/* Import the font resource to use Roboto */
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,700&display=swap');
+
+/*--------------------------------------------------------------------------------
+----- Search algorithm and canvas container layout
+--------------------------------------------------------------------------------*/
+
+/* Configuration of a container to include every application button */
+.buttons_container {
+    margin-top: 5px;
+}
+
+/* Configuration of application buttons layout */
+.buttons_container, .canvas_container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    padding: 5px;
+}
+
+/* Configuration of application buttons aspect */
+#import_button, #start_button {
+    width: 100px;
+    height: 25px;
+}

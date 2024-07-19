@@ -1,18 +1,52 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
+    <!-- Encode every text with UTF-8 to display any potential special characters -->
     <meta charset="UTF-8">
-    <title>Canvas Example</title>
+
+    <!-- Main title of the application page displayed on the browser tab -->
+    <title>Genetic Algorithm on Images</title>
+
+    <!-- Application global and general layout styling -->
+    <link rel="stylesheet" href="styles_layouts/global_layout.css">
+
+    <!-- Application search algorithm and canvas layout styling -->
+    <link rel="stylesheet" href="styles_layouts/canvas_layout.css">
 </head>
+
 <body>
-    <button id="import_button" onclick="document.getElementById('file_image_input').click()">Import PNG...</button>
-    <input id="file_image_input" type="file" accept=".png" style="display:none;"/>
-    <canvas id="original_image_canvas" width="500" height="400" style="border: solid black 1px;"></canvas>
-    
-    <button id="start_button">Start !</button>
-    <canvas id="solution_image_canvas" width="500" height="400" style="border: solid black 1px;"></canvas>
+    <!-- Title dedicated space, to properly introduce the application -->
+    <div class="application_title">Genetic Algorithm on Images</div>
+
+    <!-- Global container to integrate every applicative and visual blocks -->
+    <div class="global_container">
+
+        <!-- Container to integrate every user action related buttons -->
+        <div class="buttons_container">
+            <input id="file_image_input" type="file" accept=".png" style="display:none;"/>
+            <button id="import_button" onclick="document.getElementById('file_image_input').click()">Import PNG...</button>
+            <button id="start_button">Start !</button>
+        </div>
+
+        <!-- Container to integrate every algorithm and canvas images display functionalities -->
+        <div class="canvas_container">
+            <canvas id="original_image_canvas" width="500" height="400" style="border: solid black 1px;"></canvas>
+            <canvas id="solution_image_canvas" width="500" height="400" style="border: solid black 1px;"></canvas>
+        </div>
+
+    </div>
+
+    <!-- Application footer dedicated space, for explanations, information and credits -->
+    <div class="application_footer">
+        This application tried to rebuild a target image starting from random noise.
+        It uses a genetic algorithm to build images samples and get closer iteration by iteration.<br />
+        This application was built only for fun and for personal experiment.
+        This is a realization of <b><i>Quentin VINCENOT</i></b>.
+    </div>
 
     <script src="genetic_algorithm.js" type="module"></script>
     <script src="script.js" type="module"></script>
 </body>
+
 </html>
