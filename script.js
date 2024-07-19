@@ -9,8 +9,10 @@ let ITERATIONS = 0;
 // 
 const file_image_input = document.getElementById('file_image_input');
 
-const original_image_canvas = document.getElementById('original_image_canvas')
+const original_image_canvas = document.getElementById('original_image_canvas');
 const original_image_context = original_image_canvas.getContext('2d');
+
+const solution_image_canvas = document.getElementById('solution_image_canvas');
 
 
 // 
@@ -21,12 +23,19 @@ file_image_input.addEventListener('change', (event) => {
     reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
+            //
+            original_image_canvas.width = img.width;
+            original_image_canvas.height = img.height;
+            solution_image_canvas.width = img.width;
+            solution_image_canvas.height = img.height;
+            IMAGE_WIDTH = img.width;
+            IMAGE_HEIGHT = img.height;
             // 
             original_image_context.drawImage(img, 0, 0);
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
             const pixels = imageData.data;
-            console.log(pixels.length);
+            console.log(pixels.length / 4);
         };
         img.src = e.target.result;
     };
