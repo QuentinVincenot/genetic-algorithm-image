@@ -36,11 +36,12 @@ file_image_input.addEventListener('change', (event) => {
             let new_image_width = loaded_image.width;
             let new_image_height = loaded_image.height;
 
+            let diff_width_canvas_image = loaded_image.width - MAX_WIDTH;
+            let diff_height_canvas_image = loaded_image.height - MAX_HEIGHT;
+
             // If one of the dimension of the loaded image goes out of canvas bounds, we need to resize the image
             if(loaded_image.width > MAX_WIDTH || loaded_image.height > MAX_HEIGHT) {
 
-                let diff_width_canvas_image = loaded_image.width - MAX_WIDTH;
-                let diff_height_canvas_image = loaded_image.height - MAX_HEIGHT;
                 if(diff_width_canvas_image >= diff_height_canvas_image) {
                     // First case : the image is wider out of bounds, the highest resize is to be done to fit canvas width
                     resize_factor = MAX_WIDTH / loaded_image.width;
@@ -61,8 +62,8 @@ file_image_input.addEventListener('change', (event) => {
             }
 
             // 
-            let difference_in_width = new_canvas_width - new_image_width;
-            let difference_in_height = new_canvas_height - new_image_height;
+            //let difference_in_width = new_canvas_width - new_image_width;
+            //let difference_in_height = new_canvas_height - new_image_height;
             
             // 
             IMAGE_WIDTH = original_image_canvas.width;
@@ -70,7 +71,7 @@ file_image_input.addEventListener('change', (event) => {
 
             // Resize the image to the right dimensions
             original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
-            original_image_context.drawImage(loaded_image, 0.5*difference_in_width, 0.5*difference_in_height, new_image_width, new_image_height);
+            original_image_context.drawImage(loaded_image, 0.5*diff_width_canvas_image, 0.5*diff_height_canvas_image, new_image_width, new_image_height);
 
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
