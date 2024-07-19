@@ -100,8 +100,12 @@ file_image_input.addEventListener('change', (event) => {
         };
         loaded_image.src = e.target.result;
     };
-
     reader.readAsDataURL(file);
+
+    // Create a completely random solution for the genetic algorithm when the original image is changed
+    const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
+    // Draw the image on the second canvas, for comparison with the original image
+    drawImageSolution('solution_image_canvas', random_image_solution);
 })
 
 
