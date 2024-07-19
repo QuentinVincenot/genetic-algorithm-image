@@ -69,7 +69,8 @@ file_image_input.addEventListener('change', (event) => {
             IMAGE_HEIGHT = original_image_canvas.height;
 
             // Resize the image to the right dimensions
-            original_image_context.drawImage(loaded_image, 0, 0, 0.5*difference_in_width + new_image_width, 0.5*difference_in_height + new_image_height);
+            original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
+            original_image_context.drawImage(loaded_image, 0.5*difference_in_width, 0.5*difference_in_height, new_image_width, new_image_height);
 
             // 
             const imageData = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
