@@ -51,7 +51,7 @@ file_image_input.addEventListener('change', (event) => {
                 // Display the image at the right position in the canvas
                 original_image_context.drawImage(loaded_image, start_x, start_y, loaded_image.width, loaded_image.height);
             }
-            else if(image_wider_than_canvas && image_longer_than_canvas) {
+            else if(image_wider_than_canvas || image_longer_than_canvas) {
                 // Clear the canvas before displaying the new image
                 original_image_context.clearRect(0, 0, original_image_canvas.width, original_image_canvas.height);
 
@@ -61,10 +61,13 @@ file_image_input.addEventListener('change', (event) => {
 
                 let resize_factor = 1.0;
                 if(diff_width_canvas_image >= diff_height_canvas_image) {
+                    // Compute the resize factor depending on the ratio between the image and the canvas
                     resize_factor = MAX_WIDTH / loaded_image.width;
+                    // Compute the new image dimensions based on the resizing and the resize factor
                     let new_image_width = MAX_WIDTH;
                     let new_image_height = resize_factor * loaded_image.height;
                     
+                    // Find the appropriate y starting point to center vertically
                     let start_y = 0;
                     if(new_image_height < MAX_HEIGHT) {
                         start_y = (MAX_HEIGHT - new_image_height) / 2;
@@ -74,10 +77,13 @@ file_image_input.addEventListener('change', (event) => {
                     original_image_context.drawImage(loaded_image, 0, start_y, new_image_width, new_image_height);
                 }
                 else {
+                    // Compute the resize factor depending on the ratio between the image and the canvas
                     resize_factor = MAX_HEIGHT / loaded_image.height;
+                    // Compute the new image dimensions based on the resizing and the resize factor
                     let new_image_width = resize_factor * loaded_image.width;
                     let new_image_height = MAX_HEIGHT;
 
+                    // Find the appropriate x starting point to center horizontally
                     let start_x = 0;
                     if(new_image_width < MAX_WIDTH) {
                         start_x = (MAX_WIDTH - new_image_width) / 2;
@@ -87,6 +93,7 @@ file_image_input.addEventListener('change', (event) => {
                     original_image_context.drawImage(loaded_image, start_x, 0, new_image_width, new_image_height);
                 }
             }
+            
 
             
             /*// Initialize variables to be computed depending on the image/canvas bounds difference
