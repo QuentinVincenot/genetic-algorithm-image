@@ -62,8 +62,8 @@ file_image_input.addEventListener('change', (event) => {
                 let resize_factor = 1.0;
                 if(diff_width_canvas_image >= diff_height_canvas_image) {
                     resize_factor = MAX_WIDTH / loaded_image.width;
-                    new_image_width = MAX_WIDTH;
-                    new_image_height = resize_factor * loaded_image.height;
+                    let new_image_width = MAX_WIDTH;
+                    let new_image_height = resize_factor * loaded_image.height;
 
                     // Display the image at the right position in the canvas
                     original_image_context.drawImage(loaded_image, 0, 0, new_image_width, new_image_height);
