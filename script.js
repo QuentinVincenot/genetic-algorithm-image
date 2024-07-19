@@ -21,9 +21,9 @@ function drawImageSolution(canvasId, image_solution) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
     const imageData = ctx.createImageData(image_solution.width, image_solution.height);
-    for(let y=0; y<height; y++) {
-        for(let x=0; x<width; x++) {
-            const pixelIndex = (y * width + x) * 4;
+    for(let y=0; y<image_solution.height; y++) {
+        for(let x=0; x<image_solution.width; x++) {
+            const pixelIndex = (y * image_solution.width + x) * 4;
             const [r, g, b, o] = image_solution.pixels[y][x];
             imageData.data[pixelIndex] = r;
             imageData.data[pixelIndex + 1] = g;
