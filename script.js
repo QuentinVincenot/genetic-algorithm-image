@@ -41,7 +41,7 @@ file_image_input.addEventListener('change', (event) => {
                 let start_y = (MAX_HEIGHT - loaded_image.height) / 2;
 
                 // Display the image at the right position in the canvas
-                original_image_context.drawImage(loaded_image, 0, 0, loaded_image.width, loaded_image.height);
+                original_image_context.drawImage(loaded_image, start_x, start_y, loaded_image.width, loaded_image.height);
             }
 
             
