@@ -1,4 +1,5 @@
 import { Solution } from "./genetic_algorithm.js";
+import { draw_solution_image_in_canvas } from "./canvas.js";
 
 
 // Canvas size configuration constants
@@ -105,7 +106,8 @@ file_image_input.addEventListener('change', (event) => {
     // Create a completely random solution for the genetic algorithm when the original image is changed
     const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
     // Draw the image on the second canvas, for comparison with the original image
-    drawImageSolution('solution_image_canvas', random_image_solution);
+    //drawImageSolution('solution_image_canvas', random_image_solution);
+    draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 })
 
 
@@ -123,7 +125,7 @@ start_button.addEventListener('click', () => {
 
 
 // Function to draw the image passed in parameter into the designated Javascript canvas
-function drawImageSolution(canvasId, image_solution) {
+/*function drawImageSolution(canvasId, image_solution) {
     const canvas = document.getElementById(canvasId);
     const ctx = canvas.getContext('2d');
     const imageData = ctx.createImageData(image_solution.width, image_solution.height);
@@ -138,18 +140,25 @@ function drawImageSolution(canvasId, image_solution) {
         }
     }
     ctx.putImageData(imageData, 0, 0);
-}
+}*/
 
 // Function to update the canvas every iteration, every set amount of time
 function updateCanvas(canvasId) {
     setTimeout(() => {
-        ITERATIONS++;
-        console.log('Updating iteration', ITERATIONS);
+        // Increase the number of iterations of the genetic algorithm as a counter
+        ITERATIONS++; console.log('Updating iteration', ITERATIONS);
+
+        // Create a completely random solution for the genetic algorithm
         const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
-        drawImageSolution(canvasId, random_image_solution);
+        // Draw the image on the second canvas, for comparison with the original image
+        //drawImageSolution(canvasId, random_image_solution);
+        draw_solution_image_in_canvas(solution_image_context, random_image_solution);
+
         if(ITERATIONS < 10) {
+            // Launch the next iteration of the algorithm
             setTimeout(() => {updateCanvas('solution_image_canvas')}, 50);
         } else {
+            // Stop the algorithm after a certain number of iterations
             start_button.disabled = false;
             ITERATIONS = 0;
         }
@@ -161,6 +170,7 @@ function updateCanvas(canvasId) {
 const random_image_solution = new Solution(original_image_canvas.width, original_image_canvas.height);
 
 // Draw the image on the second canvas, for comparison with the original image
-drawImageSolution('solution_image_canvas', random_image_solution);
+//drawImageSolution('solution_image_canvas', random_image_solution);
+draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 
 

@@ -27,3 +27,8 @@
     width: 100px;
     height: 25px;
 }
+
+/* Configuration of the canvas outer borders aspect */
+#original_image_canvas, #solution_image_canvas {
+    border: solid #ccc 1px;
+}
