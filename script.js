@@ -52,8 +52,8 @@ function updateCanvas() {
         const solution_pixels = solution_image_data.data;
         console.log('Solution', solution_pixels.length / 4);
 
-        console.log('Same', sum_of_array_elements(difference_between_images(original_pixels - original_pixels)));
-        console.log('Diff', sum_of_array_elements(difference_between_images(original_pixels - solution_pixels)));
+        console.log('Same', sum_of_array_elements(difference_between_images(original_pixels, original_pixels)));
+        console.log('Diff', sum_of_array_elements(difference_between_images(original_pixels, solution_pixels)));
 
 
         if(ITERATIONS < 10) {
