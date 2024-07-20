@@ -16,6 +16,9 @@ let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 let ITERATIONS = 0;
 
+// Configure the algorithm loop frequency, to time the algorithm/visualization updates
+let UPDATE_FREQUENCY_MS = 200;
+
 
 
 // Retrieve the target solution image that the algorithm should try to reconstruct
@@ -65,13 +68,7 @@ function updateCanvas() {
         // Increase the number of iterations of the genetic algorithm as a counter
         ITERATIONS++; console.log('Updating iteration', ITERATIONS);
 
-        // Create a completely random solution for the genetic algorithm
-        //const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
-        // Draw the image on the second canvas, for comparison with the original image
-        //draw_solution_image_in_canvas(solution_image_context, random_image_solution);
-
-
-
+        
         
         // Evaluate the fitness of every randomly generated initial solutions of the algorithm
         ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
@@ -87,32 +84,16 @@ function updateCanvas() {
         document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + ALGO_BEST_FITNESS.toString();
 
 
-        /*// Build the original target solution image
-        let original_pixels = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height).data;
-        let original_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height, Array.from(original_pixels));
-        console.log('Orig', original_image_solution.pixels);
-
-        // Build the current random solution image
-        let algorithm_pixels = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height).data;
-        let algorithm_image_solution = new ImageSolution(solution_image_canvas.width, solution_image_canvas.height, Array.from(algorithm_pixels));
-        console.log('Algo', algorithm_image_solution.pixels);
-
-        console.log('Fit algo', algorithm_image_solution.evaluate_fitness(original_image_solution));
-
-        document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " +
-            algorithm_image_solution.evaluate_fitness(original_image_solution).toString();*/
-
-
 
         if(ITERATIONS < 10) {
             // Launch the next iteration of the algorithm
-            setTimeout(() => {updateCanvas()}, 50);
+            setTimeout(() => {updateCanvas()}, UPDATE_FREQUENCY_MS);
         } else {
             // Stop the algorithm after a certain number of iterations
             start_button.disabled = false;
             ITERATIONS = 0;
         }
-    }, 50);
+    }, UPDATE_FREQUENCY_MS);
 }
 
 
