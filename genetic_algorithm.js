@@ -1,3 +1,6 @@
+import { difference_between_images, sum_of_array_elements } from "./utils.js";
+
+
 class ImageSolution {
     constructor(width, height, pixels = null) {
         // Save the attributes of the image solution
@@ -35,7 +38,14 @@ class ImageSolution {
     }
 
     evaluate_fitness(target_solution) {
-        return -1;
+        // Retrieve and flatten the arrays of pixels of both images
+        let target_solution_pixels_flattened = target_solution.pixels.flat(Infinity);
+        let current_solution_pixels_flattened = this.pixels.flat(Infinity);
+
+        // Return the fitness of the current solution defined as sum of absolute differences between images, pixel-wise
+        return sum_of_array_elements(difference_between_images(
+            target_solution_pixels_flattened, current_solution_pixels_flattened
+        ));
     }
 }
 
