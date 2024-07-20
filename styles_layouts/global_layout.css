@@ -31,7 +31,7 @@ body {
 /* Configure the layout of the global container, containing other containers and visualisations */
 .global_container {
     width: 1100px;
-    height: 485px;
+    height: 515px;
     margin-top: 5px;
     background-color: #f9f9f9;
     border: 1px solid #ccc;

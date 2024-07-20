@@ -28,9 +28,11 @@
 }
 #import_button {
     width: 100px;
+    margin-top: 15px;
 }
 #start_button, #reset_button {
     width: 70px;
+    margin-top: 10px;
 }
 
 /* Configuration of the canvas outer borders aspect */
