@@ -17,7 +17,7 @@ let ALGO_BEST_FITNESS = Infinity;
 let ITERATIONS = 0;
 
 // Configure the algorithm loop frequency, to time the algorithm/visualization updates
-let UPDATE_FREQUENCY_MS = 200;
+let UPDATE_FREQUENCY_MS = 50;
 
 
 
