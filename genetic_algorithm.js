@@ -1,15 +1,37 @@
 class ImageSolution {
-    constructor(width, height) {
+    constructor(width, height, pixels = null) {
         // Save the attributes of the image solution
         this.width = width;
         this.height = height;
-        // Initialize a completely random opaque image, that are the pixels of the image solution
-        this.pixels = new Array(height).fill(null).map(() =>
-            new Array(width).fill(null).map(() =>
-                // Create the red/green/blue/opacity pixels levels of the image
-                [Math.random() * 255, Math.random() * 255, Math.random() * 255, 255]
-            )
-        );
+
+        if(pixels && (pixels.length === (width * height * 4))) {
+            // Initialize an empty array of pixels for starter
+            this.pixels = new Array(height).fill(null).map(() =>
+                new Array(width).fill(null).map(() =>
+                    [null, null, null, 255]
+                )
+            );
+
+            // Fill the empty array of pixels element-wise with the flattened pixels array received
+            for(let i=0; i<pixels.length; i++) {
+                // Retrieve the current value pixel index, pixel row and pixel column
+                let pixel_index = Math.floor(i / (width * 4));
+                let pixel_row = Math.floor(pixel_index / width);
+                let pixel_column = pixel_index % width;
+
+                // Fill the array of pixels with the corresponding pixels values (red/green/blue/opacity)
+                this.pixels[pixel_row][pixel_column] = [pixels[i], pixels[i+1], pixels[i+2], pixels[i+3]];
+            }
+        }
+        else if(pixels === null) {
+            // Initialize a completely random opaque image, that are the pixels of the image solution
+            this.pixels = new Array(height).fill(null).map(() =>
+                new Array(width).fill(null).map(() =>
+                    // Create the red/green/blue/opacity pixels levels of the image
+                    [Math.random() * 255, Math.random() * 255, Math.random() * 255, 255]
+                )
+            );
+        }
     }
 
     evaluate_fitness(target_solution) {
@@ -34,7 +56,7 @@ class ImagePopulation {
         // Initialize a population of N starting solutions, number given at the population creation
         for(let i=0; i<this.number_of_solutions; i++) {
             // Create the current random solution
-            let current_solution = new ImageSolution(this.images_width, this.images_height);
+            let current_solution = new ImageSolution(this.images_width, this.images_height, null);
             // Add the created random solution to the population list of solutions
             this.solutions.push(current_solution);
         }
