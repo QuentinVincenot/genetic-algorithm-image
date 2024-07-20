@@ -84,7 +84,7 @@ start_button.addEventListener('click', () => {
     draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
 
     // Update the best solution fitness legend in the canvas
-    document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + ALGO_BEST_FITNESS.toString();
+    document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + Math.floor(ALGO_BEST_FITNESS).toString();
 
     // Update the canvas and launch the algorithm loop
     updateCanvas();
@@ -144,7 +144,7 @@ function updateCanvas() {
             draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
 
             // Update the best solution fitness legend in the canvas
-            document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + ALGO_BEST_FITNESS.toString();
+            document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + Math.floor(ALGO_BEST_FITNESS).toString();
         }
 
 
