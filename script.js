@@ -72,11 +72,17 @@ function updateCanvas() {
         
         // Evaluate the fitness of every randomly generated initial solutions of the algorithm
         ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
+        
+        // Select the population to keep only the fittess solutions found
+        ALGO_POPULATION.select_population();
+
         // Retrieve the solution with the best fitness among all currently available solutions
         let best_fitness_element = ALGO_POPULATION.best_fitness();
         ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
         ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
 
+
+        
         // Draw the best solution image in the best found solution image canvas
         draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
 

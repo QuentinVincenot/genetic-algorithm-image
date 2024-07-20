@@ -37,30 +37,33 @@ class ImageSolution {
         }
     }
 
-    evaluate_fitness(target_solution) {
-        
-        let sum_of_differences_pixels = 0;
-
+    /*mutate(mutation_factor) {
+        // Mutate randomly all pixels with a probability of mutation_factor
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
-                for(let pixel_value=0; pixel_value<4; pixel_value++) {
+                // If the current pixel is selected to mutate, change their pixel values (red/green/blue)
+                if(Math.random() <= mutation_factor) {
+                    for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                        // Change their pixel values (red/green/blue) by a small amount
+                        this.pixels[row][col][pixel_value] += (0.1 + Math.random() * 5);
+                    }
+                }
+            }
+        }
+    }*/
+
+    evaluate_fitness(target_solution) {
+        // Compute the sum of differences in all pixels of both solutions, element-wise
+        let sum_of_differences_pixels = 0;
+        for(let row=0; row<this.height; row++) {
+            for(let col=0; col<this.width; col++) {
+                for(let pixel_value=0; pixel_value<3; pixel_value++) {
                     sum_of_differences_pixels += Math.abs(this.pixels[row][col][pixel_value] - target_solution.pixels[row][col][pixel_value]);
                 }
             }
         }
-
-        return sum_of_differences_pixels;
-
-
-        
-        /*// Retrieve and flatten the arrays of pixels of both images
-        let target_solution_pixels_flattened = target_solution.pixels.flat(Infinity);
-        let current_solution_pixels_flattened = this.pixels.flat(Infinity);
-
         // Return the fitness of the current solution defined as sum of absolute differences between images, pixel-wise
-        return sum_of_array_elements(difference_between_images(
-            target_solution_pixels_flattened, current_solution_pixels_flattened
-        ));*/
+        return sum_of_differences_pixels;
     }
 }
 
@@ -89,6 +92,23 @@ class ImagePopulation {
         
         // Initialize the array of solutions fitness with highest numbers, that should be updated later on
         this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
+    }
+
+    /*mutate_population() {
+
+    }*/
+
+    select_population() {
+        // Delete solutions from the population one by one, to reach the desired number of solutions
+        while(this.solutions.length > this.number_of_solutions) {
+            // Find the index of the worst solution based on its fitness
+            let worst_fitness = Math.max(...this.solutions_fitness);
+            let worst_solution_index = this.solutions_fitness.indexOf(worst_fitness);
+            
+            // Delete this solution from the population
+            this.solutions.splice(worst_solution_index, 1);
+            this.solutions_fitness.splice(worst_solution_index, 1);
+        }
     }
 
     evaluate_solutions_fitness(target_solution) {
