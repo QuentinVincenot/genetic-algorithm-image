@@ -147,7 +147,7 @@ class ImagePopulation {
 
     evaluate_solutions_fitness(target_solution) {
         // Evaluate the fitness of every solution in the population
-        for(let i=0; i<this.number_of_solutions; i++) {
+        for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.solutions[i].evaluate_fitness(target_solution);
         }
     }
