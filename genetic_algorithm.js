@@ -38,14 +38,27 @@ class ImageSolution {
     }
 
     evaluate_fitness(target_solution) {
-        // Retrieve and flatten the arrays of pixels of both images
+        
+        let sum_of_differences_pixels = 0;
+
+        for(let row=0; row<this.height; row++) {
+            for(let col=0; col<this.width; col++) {
+                sum_of_differences_pixels += Math.abs(this.pixels[row][col] - target_solution.pixels[row][col]);
+            }
+        }
+
+        return sum_of_differences_pixels;
+
+
+        
+        /*// Retrieve and flatten the arrays of pixels of both images
         let target_solution_pixels_flattened = target_solution.pixels.flat(Infinity);
         let current_solution_pixels_flattened = this.pixels.flat(Infinity);
 
         // Return the fitness of the current solution defined as sum of absolute differences between images, pixel-wise
         return sum_of_array_elements(difference_between_images(
             target_solution_pixels_flattened, current_solution_pixels_flattened
-        ));
+        ));*/
     }
 }
 
