@@ -9,12 +9,17 @@ const original_image_context = original_image_canvas.getContext('2d');
 const solution_image_canvas = document.getElementById('solution_image_canvas');
 const solution_image_context = solution_image_canvas.getContext('2d');
 
+
 // 
 let ALGO_POPULATION = null;
 let ALGO_TARGET_SOLUTION = null;
 let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 
+// Genetic Algorithm number of solutions to keep at the same time in the population
+let ALGO_POPULATION_SOLUTIONS_NUMBER = 30;
+// Genetic Algorithm crossover number (number of offsprings to generate at each generation)
+let ALGO_CROSSOVER_NUMBER = 20;
 // Genetic Algorithm mutation factor (proportion of solutions that can mutate all their pixels at each generation)
 let ALGO_MUTATION_FACTOR = 0.15;
 // Genetic Algorithm current number of iterations
@@ -50,7 +55,9 @@ start_button.addEventListener('click', () => {
     // If an instance of the Genetic Algorithm does not exist yet, create a new one
     if(!ALGO_POPULATION) {
         // Initialize a Genetic Algorithm population with default parameters
-        ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
+        ALGO_POPULATION = new ImagePopulation(ALGO_POPULATION_SOLUTIONS_NUMBER,
+            original_image_canvas.width, original_image_canvas.height,
+            ALGO_CROSSOVER_NUMBER, ALGO_MUTATION_FACTOR);
     }
     
     // Evaluate the fitness of every randomly generated initial solutions of the algorithm

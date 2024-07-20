@@ -66,13 +66,14 @@ class ImageSolution {
 }
 
 class ImagePopulation {
-    constructor(number_of_solutions, images_width, images_height, mutation_factor) {
+    constructor(number_of_solutions, images_width, images_height, crossover_number, mutation_factor) {
         // Save the number of solutions a population can have at a given time
         this.number_of_solutions = number_of_solutions;
         // Save the attributes of an image solution
         this.images_width = images_width;
         this.images_height = images_height;
-        // Save the mutation factor of the population solutions
+        // Save the crossover number and mutation factor parameters of the population
+        this.crossover_number = crossover_number;
         this.mutation_factor = mutation_factor;
 
         // Initialize the starting solutions of the population
@@ -96,28 +97,35 @@ class ImagePopulation {
 
     crossover_population() {
         let initial_number_of_solutions = this.number_of_solutions;
-        for(let i=0; i<initial_number_of_solutions; i++) {
+        for(let i=0; i<this.crossover_number; i++) {
+            // Select randomly two different solutions of the population to be parents of the new solution to generate
             let first_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
             let second_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
             while(second_solution_index == first_solution_index) {
                 second_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
             }
 
+            // Create a new solution that will be generated through the selected parents crossover
             let new_solution = new ImageSolution(this.images_width, this.images_height, null);
             for(let row=0; row<this.height; row++) {
                 for(let col=0; col<this.width; col++) {
+                    // Select randomly one parent or the other to transmit the current pixel to the offspring
                     let solution_index_to_choose = Math.floor(Math.random() * 2);
                     if(solution_index_to_choose == 0) {
                         for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                            // Take the current pixel of the first parent solution to create the current pixel of the offspring
                             new_solution.pixels[row][col][pixel_value] = this.solutions[first_solution_index].pixels[row][col][pixel_value];
                         }
                     } else {
                         for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                            // Take the current pixel of the second parent solution to create the current pixel of the offspring
                             new_solution.pixels[row][col][pixel_value] = this.solutions[second_solution_index].pixels[row][col][pixel_value];
                         }
                     }
                 }
             }
+
+            // Save the new solution generated and add it to the population list of solutions
             this.solutions.push(new_solution);
             this.solutions_fitness.push(Infinity);
         }
