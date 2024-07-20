@@ -3,11 +3,13 @@ import { ImagePopulation, ImageSolution } from "./genetic_algorithm.js";
 import { draw_solution_image_in_canvas } from "./canvas.js";
 
 
+
 // Retrieve the original and the solution image canvas and respective contexts
 const original_image_canvas = document.getElementById('original_image_canvas');
 const original_image_context = original_image_canvas.getContext('2d');
 const solution_image_canvas = document.getElementById('solution_image_canvas');
 const solution_image_context = solution_image_canvas.getContext('2d');
+
 
 
 // 
@@ -17,9 +19,9 @@ let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 
 // Genetic Algorithm number of solutions to keep at the same time in the population
-let ALGO_POPULATION_SIZE = 50;
+let ALGO_POPULATION_SIZE = 30;
 // Genetic Algorithm crossover number (number of offsprings to generate at each generation)
-let ALGO_CROSSOVER_NUMBER = 30;
+let ALGO_CROSSOVER_NUMBER = 20;
 // Genetic Algorithm mutation factor (proportion of solutions that can mutate all their pixels at each generation)
 let ALGO_MUTATION_FACTOR = 0.35;
 // Genetic Algorithm current number of iterations
@@ -49,8 +51,17 @@ const start_button = document.getElementById('start_button');
 
 // Add an event listener on the 'Start' button to begin the animation
 start_button.addEventListener('click', () => {
-    // Disable the 'Start' while the algorithm is running to avoid strange behaviours
+    // Disable the 'Start' and 'Reset' buttons while the algorithm is running to avoid strange behaviours
     start_button.disabled = true;
+    reset_button.disabled = true;
+    document.getElementById('input_population_size').disabled = true;
+    document.getElementById('input_crossover_numbers').disabled = true;
+    document.getElementById('input_mutation_rate').disabled = true;
+
+    // Retrieve the algorithm parameters that were inputted by the user in the dedicated fields
+    ALGO_POPULATION_SIZE = document.getElementById('input_population_size').value;
+    ALGO_CROSSOVER_NUMBER = document.getElementById('input_crossover_numbers').value;
+    ALGO_MUTATION_FACTOR = document.getElementById('input_mutation_rate').value;
 
     // If an instance of the Genetic Algorithm does not exist yet, create a new one
     if(!ALGO_POPULATION) {
@@ -108,7 +119,7 @@ function updateCanvas() {
 
         
         
-        // 
+        // Randomly make the population solutions crossover to create new solutions
         ALGO_POPULATION.crossover_population();
         
         // Randomly mutate the population based on a mutation factor proper to the population
@@ -142,6 +153,10 @@ function updateCanvas() {
         } else {
             // Stop the algorithm after a certain number of iterations
             start_button.disabled = false;
+            reset_button.disabled = false;
+            document.getElementById('input_population_size').disabled = false;
+            document.getElementById('input_crossover_numbers').disabled = false;
+            document.getElementById('input_mutation_rate').disabled = false;
         }
     }, UPDATE_FREQUENCY_MS);
 }
