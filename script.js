@@ -51,15 +51,18 @@ function updateCanvas() {
 
         // Build the original target solution image
         let original_pixels = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height).data;
-        let original_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height, original_pixels);
+        let original_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height, Array.from(original_pixels));
         console.log('Orig', original_image_solution.pixels);
 
         // Build the current random solution image
         let algorithm_pixels = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height).data;
-        let algorithm_image_solution = new ImageSolution(solution_image_canvas.width, solution_image_canvas.height, algorithm_pixels);
+        let algorithm_image_solution = new ImageSolution(solution_image_canvas.width, solution_image_canvas.height, Array.from(algorithm_pixels));
         console.log('Algo', algorithm_image_solution.pixels);
 
         console.log('Fit algo', algorithm_image_solution.evaluate_fitness(original_image_solution));
+
+        document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " +
+            algorithm_image_solution.evaluate_fitness(original_image_solution).toString();
 
 
         /*const original_image_data = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
