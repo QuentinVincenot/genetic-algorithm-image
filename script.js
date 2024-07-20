@@ -15,9 +15,13 @@ let ALGO_TARGET_SOLUTION = null;
 let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 
+// Genetic Algorithm mutation factor (proportion of solutions that can mutate all their pixels at each generation)
 let ALGO_MUTATION_FACTOR = 0.15;
-let ITERATIONS = 0;
+// Genetic Algorithm current number of iterations
+let ALGO_ITERATIONS = 0;
 
+// Configure the maximum amount of iterations the algorithm can go through before stopping
+let MAX_ITERATIONS = 30;
 // Configure the algorithm loop frequency, to time the algorithm/visualization updates
 let UPDATE_FREQUENCY_MS = 50;
 
@@ -43,8 +47,12 @@ start_button.addEventListener('click', () => {
     // Disable the 'Start' while the algorithm is running to avoid strange behaviours
     start_button.disabled = true;
 
-    // Initialize a Genetic Algorithm population
-    ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
+    // If an instance of the Genetic Algorithm does not exist yet, create a new one
+    if(!ALGO_POPULATION) {
+        // Initialize a Genetic Algorithm population with default parameters
+        ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
+    }
+    
     // Evaluate the fitness of every randomly generated initial solutions of the algorithm
     ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
     // Retrieve the solution with the best fitness among all currently available solutions
@@ -69,8 +77,10 @@ const reset_button = document.getElementById('reset_button');
 
 // Add an event listener on the 'Reset' button to clear the algorithm status
 reset_button.addEventListener('click', () => {
-    // Initialize a Genetic Algorithm population from scratch
-    ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
+    // Delete the current Genetic Algorithm to start over
+    ALGO_POPULATION = null;
+    // Reset the current number of iterations the algorithm went through
+    ALGO_ITERATIONS = 0;
 
     // Create a completely random solution to initialize the solution canvas with
     const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
@@ -87,7 +97,7 @@ reset_button.addEventListener('click', () => {
 function updateCanvas() {
     setTimeout(() => {
         // Increase the number of iterations of the genetic algorithm as a counter
-        ITERATIONS++; console.log('Updating iteration', ITERATIONS);
+        ALGO_ITERATIONS++; console.log('Updating iteration', ALGO_ITERATIONS);
 
         
         
@@ -116,13 +126,12 @@ function updateCanvas() {
 
 
 
-        if(ITERATIONS < 20) {
+        if(ALGO_ITERATIONS < MAX_ITERATIONS) {
             // Launch the next iteration of the algorithm
             setTimeout(() => {updateCanvas()}, UPDATE_FREQUENCY_MS);
         } else {
             // Stop the algorithm after a certain number of iterations
             start_button.disabled = false;
-            ITERATIONS = 0;
         }
     }, UPDATE_FREQUENCY_MS);
 }
