@@ -24,9 +24,14 @@
 
         <!-- Container to integrate every user action related buttons -->
         <div class="buttons_container">
-            <input id="file_image_input" type="file" accept=".png" style="display:none;"/>
-            <button id="import_button" onclick="document.getElementById('file_image_input').click()">Import PNG...</button>
-            <button id="start_button">Start !</button>
+            <div>
+                <input id="file_image_input" type="file" accept=".png" style="display:none;"/>
+                <button id="import_button" onclick="document.getElementById('file_image_input').click()">Import PNG...</button>
+            </div>
+            <div>
+                <button id="start_button">Start !</button>
+                <button id="reset_button">Start !</button>
+            </div>
         </div>
 
         <!-- Container to integrate every algorithm and canvas images display functionalities -->

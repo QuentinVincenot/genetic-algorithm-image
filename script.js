@@ -64,6 +64,25 @@ start_button.addEventListener('click', () => {
 
 
 
+// Retrieve the button to reset the genetic algorithm
+const reset_button = document.getElementById('reset_button');
+
+// Add an event listener on the 'Reset' button to clear the algorithm status
+reset_button.addEventListener('click', () => {
+    // Initialize a Genetic Algorithm population from scratch
+    ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
+
+    // Create a completely random solution to initialize the solution canvas with
+    const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
+    // Draw the image on the second canvas, for comparison with the original image
+    draw_solution_image_in_canvas(solution_image_context, random_image_solution);
+
+    // Reset the best solution found legend for further algorithm execution
+    document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = ???";
+});
+
+
+
 // Function to update the canvas every iteration, every set amount of time
 function updateCanvas() {
     setTimeout(() => {
@@ -96,7 +115,7 @@ function updateCanvas() {
 
 
 
-        if(ITERATIONS < 10) {
+        if(ITERATIONS < 20) {
             // Launch the next iteration of the algorithm
             setTimeout(() => {updateCanvas()}, UPDATE_FREQUENCY_MS);
         } else {

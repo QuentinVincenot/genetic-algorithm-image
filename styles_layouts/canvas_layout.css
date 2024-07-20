@@ -23,9 +23,14 @@
 }
 
 /* Configuration of application buttons aspect */
-#import_button, #start_button {
-    width: 100px;
+#import_button, #start_button, #reset_button {
     height: 25px;
+}
+#import_button {
+    width: 100px;
+}
+#start_button, #reset_button {
+    width: 70px;
 }
 
 /* Configuration of the canvas outer borders aspect */
