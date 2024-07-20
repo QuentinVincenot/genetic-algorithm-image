@@ -14,6 +14,8 @@ let ALGO_POPULATION = null;
 let ALGO_TARGET_SOLUTION = null;
 let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
+
+let ALGO_MUTATION_FACTOR = 0.15;
 let ITERATIONS = 0;
 
 // Configure the algorithm loop frequency, to time the algorithm/visualization updates
@@ -42,7 +44,7 @@ start_button.addEventListener('click', () => {
     start_button.disabled = true;
 
     // Initialize a Genetic Algorithm population
-    ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height);
+    ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height, ALGO_MUTATION_FACTOR);
     // Evaluate the fitness of every randomly generated initial solutions of the algorithm
     ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
     // Retrieve the solution with the best fitness among all currently available solutions
@@ -70,6 +72,9 @@ function updateCanvas() {
 
         
         
+        // Randomly mutate the population based on a mutation factor proper to the population
+        ALGO_POPULATION.mutate_population();
+        
         // Evaluate the fitness of every randomly generated initial solutions of the algorithm
         ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
         
@@ -82,7 +87,7 @@ function updateCanvas() {
         ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
 
 
-        
+
         // Draw the best solution image in the best found solution image canvas
         draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
 

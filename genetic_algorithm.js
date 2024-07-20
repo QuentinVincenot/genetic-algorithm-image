@@ -37,7 +37,7 @@ class ImageSolution {
         }
     }
 
-    /*mutate(mutation_factor) {
+    mutate(mutation_factor) {
         // Mutate randomly all pixels with a probability of mutation_factor
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
@@ -50,7 +50,7 @@ class ImageSolution {
                 }
             }
         }
-    }*/
+    }
 
     evaluate_fitness(target_solution) {
         // Compute the sum of differences in all pixels of both solutions, element-wise
@@ -58,6 +58,7 @@ class ImageSolution {
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
                 for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                    // Substract pixel values directly between the two solution images pixels
                     sum_of_differences_pixels += Math.abs(this.pixels[row][col][pixel_value] - target_solution.pixels[row][col][pixel_value]);
                 }
             }
@@ -68,12 +69,14 @@ class ImageSolution {
 }
 
 class ImagePopulation {
-    constructor(number_of_solutions, images_width, images_height) {
+    constructor(number_of_solutions, images_width, images_height, mutation_factor) {
         // Save the number of solutions a population can have at a given time
         this.number_of_solutions = number_of_solutions;
         // Save the attributes of an image solution
         this.images_width = images_width;
         this.images_height = images_height;
+        // Save the mutation factor of the population solutions
+        this.mutation_factor = mutation_factor;
 
         // Initialize the starting solutions of the population
         this.solutions = [];
@@ -94,9 +97,12 @@ class ImagePopulation {
         this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
     }
 
-    /*mutate_population() {
-
-    }*/
+    mutate_population() {
+        // Mutate a random proportion of the population solutions
+        for(let i=0; i<this.number_of_solutions; i++) {
+            this.solutions.mutate(this.mutation_factor);
+        }
+    }
 
     select_population() {
         // Delete solutions from the population one by one, to reach the desired number of solutions
