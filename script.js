@@ -17,7 +17,7 @@ let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 
 // Genetic Algorithm number of solutions to keep at the same time in the population
-let ALGO_POPULATION_SOLUTIONS_NUMBER = 50;
+let ALGO_POPULATION_SIZE = 50;
 // Genetic Algorithm crossover number (number of offsprings to generate at each generation)
 let ALGO_CROSSOVER_NUMBER = 30;
 // Genetic Algorithm mutation factor (proportion of solutions that can mutate all their pixels at each generation)
@@ -55,7 +55,7 @@ start_button.addEventListener('click', () => {
     // If an instance of the Genetic Algorithm does not exist yet, create a new one
     if(!ALGO_POPULATION) {
         // Initialize a Genetic Algorithm population with default parameters
-        ALGO_POPULATION = new ImagePopulation(ALGO_POPULATION_SOLUTIONS_NUMBER,
+        ALGO_POPULATION = new ImagePopulation(ALGO_POPULATION_SIZE,
             original_image_canvas.width, original_image_canvas.height,
             ALGO_CROSSOVER_NUMBER, ALGO_MUTATION_FACTOR);
     }
