@@ -94,9 +94,38 @@ class ImagePopulation {
         this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
     }
 
+    crossover_population() {
+        let initial_number_of_solutions = this.number_of_solutions;
+        for(let i=0; i<initial_number_of_solutions; i++) {
+            let first_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
+            let second_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
+            while(second_solution_index == first_solution_index) {
+                second_solution_index = Math.floor(Math.random() * initial_number_of_solutions);
+            }
+
+            let new_solution = new ImageSolution(this.images_width, this.images_height, null);
+            for(let row=0; row<this.height; row++) {
+                for(let col=0; col<this.width; col++) {
+                    let solution_index_to_choose = Math.floor(Math.random() * 2);
+                    if(solution_index_to_choose == 0) {
+                        for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                            new_solution.pixels[row][col][pixel_value] = this.solutions[first_solution_index].pixels[row][col][pixel_value];
+                        }
+                    } else {
+                        for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                            new_solution.pixels[row][col][pixel_value] = this.solutions[second_solution_index].pixels[row][col][pixel_value];
+                        }
+                    }
+                }
+            }
+            this.solutions.push(new_solution);
+            this.solutions_fitness.push(Infinity);
+        }
+    }
+
     mutate_population() {
         // Mutate a random proportion of the population solutions
-        for(let i=0; i<this.number_of_solutions; i++) {
+        for(let i=0; i<this.solutions.length; i++) {
             if(Math.random() <= this.mutation_factor) {
                 this.solutions[i].mutate();
             }

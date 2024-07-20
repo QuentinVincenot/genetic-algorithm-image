@@ -101,6 +101,9 @@ function updateCanvas() {
 
         
         
+        // 
+        ALGO_POPULATION.crossover_population();
+        
         // Randomly mutate the population based on a mutation factor proper to the population
         ALGO_POPULATION.mutate_population();
         
