@@ -16,7 +16,7 @@ class ImageSolution {
             );
 
             // Fill the empty array of pixels element-wise with the flattened pixels array received
-            for(let i=0; i<pixels.length; i++) {
+            for(let i=0; i<pixels.length; i=i+4) {
                 // Retrieve the current value pixel index, pixel row and pixel column
                 let pixel_index = Math.floor(i / (width * 4));
                 let pixel_row = Math.floor(pixel_index / width);
