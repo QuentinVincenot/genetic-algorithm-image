@@ -17,11 +17,11 @@ let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 
 // Genetic Algorithm number of solutions to keep at the same time in the population
-let ALGO_POPULATION_SOLUTIONS_NUMBER = 30;
+let ALGO_POPULATION_SOLUTIONS_NUMBER = 50;
 // Genetic Algorithm crossover number (number of offsprings to generate at each generation)
-let ALGO_CROSSOVER_NUMBER = 20;
+let ALGO_CROSSOVER_NUMBER = 30;
 // Genetic Algorithm mutation factor (proportion of solutions that can mutate all their pixels at each generation)
-let ALGO_MUTATION_FACTOR = 0.15;
+let ALGO_MUTATION_FACTOR = 0.35;
 // Genetic Algorithm current number of iterations
 let ALGO_ITERATIONS = 0;
 

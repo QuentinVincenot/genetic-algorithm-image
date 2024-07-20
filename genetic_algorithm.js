@@ -43,7 +43,7 @@ class ImageSolution {
             for(let col=0; col<this.width; col++) {
                 for(let pixel_value=0; pixel_value<3; pixel_value++) {
                     // Change their pixel values (red/green/blue) by a small amount
-                    this.pixels[row][col][pixel_value] += (0.1 + Math.random() * 5);
+                    this.pixels[row][col][pixel_value] += (0.1 + Math.random() * 50);
                 }
             }
         }
