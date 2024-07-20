@@ -72,10 +72,8 @@ class ImagePopulation {
             this.solutions.push(current_solution);
         }
         
-        // Initialize the array of solutions fitness with highest numbers, that should be updated right after
+        // Initialize the array of solutions fitness with highest numbers, that should be updated later on
         this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
-        // Evaluate directly the fitness of the randomly generated solutions
-        this.evaluate_solutions_fitness();
     }
 
     evaluate_solutions_fitness(target_solution) {
