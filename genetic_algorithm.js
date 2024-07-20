@@ -59,6 +59,7 @@ class ImagePopulation {
 
         // Initialize the starting solutions of the population
         this.solutions = [];
+        this.solutions_fitness = [];
         this.initialize_population();
     }
 
@@ -70,6 +71,23 @@ class ImagePopulation {
             // Add the created random solution to the population list of solutions
             this.solutions.push(current_solution);
         }
+        
+        // Initialize the array of solutions fitness with highest numbers, that should be updated right after
+        this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
+        // Evaluate directly the fitness of the randomly generated solutions
+        this.evaluate_solutions_fitness();
+    }
+
+    evaluate_solutions_fitness(target_solution) {
+        // Evaluate the fitness of every solution in the population
+        for(let i=0; i<this.number_of_solutions; i++) {
+            this.solutions_fitness[i] = this.solutions[i].evaluate_fitness(target_solution);
+        }
+    }
+
+    best_fitness() {
+        // Return the lowest fitness that corresponds to the best fitting image
+        return Math.min(...this.solutions_fitness);
     }
 }
 
