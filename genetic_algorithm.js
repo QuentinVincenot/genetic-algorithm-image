@@ -37,14 +37,16 @@ class ImageSolution {
         }
     }
 
-    mutate() {
+    mutate(mutation_factor) {
         // Mutate all pixels by small amount if the solution has been chosen
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
-                for(let pixel_value=0; pixel_value<3; pixel_value++) {
-                    // Change their pixel values (red/green/blue) by a small amount
-                    this.pixels[row][col][pixel_value] += (-50 + Math.random() * 100);
-                    this.pixels[row][col][pixel_value] = Math.max(0, Math.min(this.pixels[row][col][pixel_value], 255));
+                if(Math.random() < mutation_factor) {
+                    for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                        // Change their pixel values (red/green/blue) by a small amount
+                        this.pixels[row][col][pixel_value] += (-5 + Math.random() * 10);
+                        this.pixels[row][col][pixel_value] = Math.max(0, Math.min(this.pixels[row][col][pixel_value], 255));
+                    }
                 }
             }
         }
@@ -135,9 +137,9 @@ class ImagePopulation {
     mutate_population() {
         // Mutate a random proportion of the population solutions
         for(let i=0; i<this.solutions.length; i++) {
-            if(Math.random() <= this.mutation_factor) {
-                this.solutions[i].mutate();
-            }
+            //if(Math.random() <= this.mutation_factor) {
+            this.solutions[i].mutate(this.mutation_factor);
+            //}
         }
     }
 
