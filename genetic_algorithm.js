@@ -84,8 +84,13 @@ class ImagePopulation {
     }
 
     best_fitness() {
-        // Return the lowest fitness that corresponds to the best fitting image
-        return Math.min(...this.solutions_fitness);
+        // Determine the lowest fitness among all population solutions fitness scores
+        let best_fitness = Math.min(...this.solutions_fitness);
+        // Determine the solution in the population that holds this fitness score
+        let best_solution = this.solutions[this.solutions_fitness.indexOf(best_fitness)];
+
+        // Return the solution, and its fitness score, that corresponds to the best fitting image
+        return {'best_solution': best_solution, 'best_fitness': best_fitness};
     }
 }
 

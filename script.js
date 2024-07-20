@@ -12,6 +12,7 @@ const solution_image_context = solution_image_canvas.getContext('2d');
 // 
 let ALGO_POPULATION = null;
 let ALGO_TARGET_SOLUTION = null;
+let ALGO_BEST_SOLUTION = null;
 let ALGO_BEST_FITNESS = Infinity;
 let ITERATIONS = 0;
 
@@ -41,8 +42,13 @@ start_button.addEventListener('click', () => {
     ALGO_POPULATION = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height);
     // Evaluate the fitness of every randomly generated initial solutions of the algorithm
     ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
-    // Retrieve the best fitness among all currently available solutions
-    ALGO_BEST_FITNESS = ALGO_POPULATION.best_fitness();
+    // Retrieve the solution with the best fitness among all currently available solutions
+    let best_fitness_element = ALGO_POPULATION.best_fitness();
+    ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
+    ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
+
+    // Draw the best solution image in the best found solution image canvas
+    draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
 
     // Update the best solution fitness legend in the canvas
     document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + ALGO_BEST_FITNESS.toString();
@@ -66,7 +72,22 @@ function updateCanvas() {
 
 
 
-        // Build the original target solution image
+        
+        // Evaluate the fitness of every randomly generated initial solutions of the algorithm
+        ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
+        // Retrieve the solution with the best fitness among all currently available solutions
+        let best_fitness_element = ALGO_POPULATION.best_fitness();
+        ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
+        ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
+
+        // Draw the best solution image in the best found solution image canvas
+        draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
+
+        // Update the best solution fitness legend in the canvas
+        document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + ALGO_BEST_FITNESS.toString();
+
+
+        /*// Build the original target solution image
         let original_pixels = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height).data;
         let original_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height, Array.from(original_pixels));
         console.log('Orig', original_image_solution.pixels);
@@ -79,7 +100,7 @@ function updateCanvas() {
         console.log('Fit algo', algorithm_image_solution.evaluate_fitness(original_image_solution));
 
         document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " +
-            algorithm_image_solution.evaluate_fitness(original_image_solution).toString();
+            algorithm_image_solution.evaluate_fitness(original_image_solution).toString();*/
 
 
 
