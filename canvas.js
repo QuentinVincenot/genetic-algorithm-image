@@ -4,8 +4,8 @@ export { draw_solution_image_in_canvas };
 
 
 // Canvas size configuration constants
-let MAX_WIDTH = 500;
-let MAX_HEIGHT = 400;
+let MAX_WIDTH = 300;
+let MAX_HEIGHT = 200;
 
 // Retrieve the original and the solution image canvas and respective contexts
 const original_image_canvas = document.getElementById('original_image_canvas');
