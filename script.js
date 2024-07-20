@@ -14,6 +14,13 @@ let ITERATIONS = 0;
 
 
 
+// Create a completely random solution for the genetic algorithm
+const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
+// Draw the image on the second canvas, for comparison with the original image
+draw_solution_image_in_canvas(solution_image_context, random_image_solution);
+
+
+
 // Retrieve the button to start the animation
 const start_button = document.getElementById('start_button');
 
@@ -21,12 +28,9 @@ const start_button = document.getElementById('start_button');
 start_button.addEventListener('click', () => {
     // Disable the 'Start' while the algorithm is running to avoid strange behaviours
     start_button.disabled = true;
-
-
     // Initialize a Genetic Algorithm population
-    let population = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height);
-
-
+    //let population = new ImagePopulation(10, original_image_canvas.width, original_image_canvas.height);
+    // Update the canvas and launch the algorithm loop
     updateCanvas();
 });
 
@@ -44,16 +48,30 @@ function updateCanvas() {
         draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 
 
-        const original_image_data = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
-        const original_pixels = original_image_data.data;
-        console.log('Original', original_pixels.length / 4);
 
-        const solution_image_data = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height);
+        // Build the original target solution image
+        let original_pixels = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height).data;
+        let original_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height, original_pixels);
+        console.log('Orig', original_image_solution.pixels);
+
+        // Build the current random solution image
+        let algorithm_pixels = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height).data;
+        let algorithm_image_solution = new ImageSolution(solution_image_canvas.width, solution_image_canvas.height, algorithm_pixels);
+        console.log('Algo', algorithm_image_solution.pixels);
+
+        console.log('Fit algo', algorithm_image_solution.evaluate_fitness(original_image_solution));
+
+
+        /*const original_image_data = original_image_context.getImageData(0, 0, original_image_canvas.width, original_image_canvas.height);
+        const original_pixels = original_image_data.data;
+        console.log('Original', original_pixels.length / 4);*/
+
+        /*const solution_image_data = solution_image_context.getImageData(0, 0, solution_image_canvas.width, solution_image_canvas.height);
         const solution_pixels = solution_image_data.data;
         console.log('Solution', solution_pixels.length / 4);
 
         console.log('Same', sum_of_array_elements(difference_between_images(original_pixels, original_pixels)));
-        console.log('Diff', sum_of_array_elements(difference_between_images(original_pixels, solution_pixels)));
+        console.log('Diff', sum_of_array_elements(difference_between_images(original_pixels, solution_pixels)));*/
 
 
         if(ITERATIONS < 10) {
@@ -66,13 +84,5 @@ function updateCanvas() {
         }
     }, 50);
 }
-
-
-
-// Create a completely random solution for the genetic algorithm
-const random_image_solution = new ImageSolution(original_image_canvas.width, original_image_canvas.height);
-
-// Draw the image on the second canvas, for comparison with the original image
-draw_solution_image_in_canvas(solution_image_context, random_image_solution);
 
 
