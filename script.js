@@ -55,11 +55,13 @@ start_button.addEventListener('click', () => {
     start_button.disabled = true;
     reset_button.disabled = true;
     document.getElementById('input_population_size').disabled = true;
+    document.getElementById('input_iterations_number').disabled = true;
     document.getElementById('input_crossover_numbers').disabled = true;
     document.getElementById('input_mutation_rate').disabled = true;
 
     // Retrieve the algorithm parameters that were inputted by the user in the dedicated fields
     ALGO_POPULATION_SIZE = document.getElementById('input_population_size').value;
+    MAX_ITERATIONS = document.getElementById('input_iterations_number').value;
     ALGO_CROSSOVER_NUMBER = document.getElementById('input_crossover_numbers').value;
     ALGO_MUTATION_FACTOR = document.getElementById('input_mutation_rate').value;
 
@@ -155,6 +157,7 @@ function updateCanvas() {
             start_button.disabled = false;
             reset_button.disabled = false;
             document.getElementById('input_population_size').disabled = false;
+            document.getElementById('input_iterations_number').disabled = false;
             document.getElementById('input_crossover_numbers').disabled = false;
             document.getElementById('input_mutation_rate').disabled = false;
         }

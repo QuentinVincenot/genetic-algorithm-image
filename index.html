@@ -30,9 +30,11 @@
             </div>
             <div style="text-align:center; width:500px;">
                 <label>Population:</label>
-                <input id="input_population_size" type="number" size="3" value="30" min="10" max="100" step="5" placeholder="30">
+                <input id="input_population_size" type="number" size="3" value="30" min="10" max="100" step="5" placeholder="30" style="margin-top:10px;">
+                <label>Iterations:</label>
+                <input id="input_iterations_number" type="number" size="3" value="30" min="10" max="300" step="10" placeholder="30"><br/>
                 <label>Crossovers:</label>
-                <input id="input_crossover_numbers" type="number" size="3" value="20" min="5" max="100" step="1" placeholder="20">
+                <input id="input_crossover_numbers" type="number" size="3" value="20" min="5" max="100" step="1" placeholder="20" style="margin-top:5px;">
                 <label>Mutation rate:</label>
                 <input id="input_mutation_rate" type="number" size="4" value="0.35" min="0.0" max="1.0" step="0.05" placeholder="0.35"><br>
                 <button id="start_button">Start !</button>
