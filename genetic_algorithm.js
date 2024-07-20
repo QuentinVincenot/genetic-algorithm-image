@@ -43,7 +43,9 @@ class ImageSolution {
 
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
-                sum_of_differences_pixels += Math.abs(this.pixels[row][col] - target_solution.pixels[row][col]);
+                for(let pixel_value=0; pixel_value<4; pixel_value++) {
+                    sum_of_differences_pixels += Math.abs(this.pixels[row][col][pixel_value] - target_solution.pixels[row][col][pixel_value]);
+                }
             }
         }
 
