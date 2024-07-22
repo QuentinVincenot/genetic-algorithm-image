@@ -1,4 +1,4 @@
-import { calculateDifferences, sumDifferences, difference_between_images, sum_of_array_elements } from "./utils.js";
+import { calculateAndSumDifferences, calculateDifferences, sumDifferences, difference_between_images, sum_of_array_elements } from "./utils.js";
 
 
 
@@ -62,9 +62,7 @@ class ImageSolution {
 
         
 
-        const differences = calculateDifferences(this.pixels, target_solution.pixels);
-        const sum_of_differences_pixels = sumDifferences(differences)[0];
-        //console.log('evaluated:', sum_of_differences_pixels);
+        const sum_of_differences_pixels = calculateAndSumDifferences(this.pixels, target_solution.pixels)[0];
         return sum_of_differences_pixels;
         
         

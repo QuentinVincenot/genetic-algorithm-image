@@ -1,7 +1,24 @@
-export { difference_between_images, sum_of_array_elements, calculateDifferences, sumDifferences };
+export { calculateAndSumDifferences, difference_between_images, sum_of_array_elements, calculateDifferences, sumDifferences };
 
 
 const gpu = new GPU();
+
+
+const calculateAndSumDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
+    let sum = 0;
+    for (let y = 0; y < this.constants.height; y++) {
+        for (let x = 0; x < this.constants.width; x++) {
+            for (let pixel_value = 0; pixel_value < 3; pixel_value++) {
+                sum += Math.abs(current_pixels[y][x][pixel_value] - target_pixels[y][x][pixel_value]);
+            }
+        }
+    }
+    return sum;
+}, {
+    constants: { width: 300, height: 200 },
+    output: [1]
+});
+
 
 const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
     let sum=0;
