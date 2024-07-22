@@ -172,11 +172,10 @@ class ImagePopulation {
         
         
         // Convertir les solutions en format compatible pour GPU
-        const solutions_pixels = this.solutions.map(solution => solution.pixels);
         const target_pixels = target_solution.pixels;
 
         // Évaluer la fitness de chaque solution
-        const solutions_fitness = evaluateFitnessForPopulation(solutions_pixels, target_pixels);
+        const solutions_fitness = evaluateFitnessForPopulation(this.solutions, target_pixels, this.solutions.length);
         
         // Assigner les résultats aux solutions_fitness
         for (let i = 0; i < this.solutions.length; i++) {

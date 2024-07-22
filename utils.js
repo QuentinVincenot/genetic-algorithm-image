@@ -21,14 +21,14 @@ const calculateAndSumDifferences = gpu.createKernel(function(current_pixels, tar
     output: [1]
 });
 
-const evaluateFitnessForPopulation = gpu.createKernel(function(solutions_pixels, target_pixels) {
+const evaluateFitnessForPopulation = gpu.createKernel(function(solutions, target_pixels, population_size) {
     let solutions_all_fitnesses = [];
-    for(let s = 0; s < this.constants.population_size; s++) {
+    for(let s = 0; s < population_size; s++) {
         let sum = 0;
         for (let y = 0; y < this.constants.height; y++) {
             for (let x = 0; x < this.constants.width; x++) {
                 for (let pixel_value = 0; pixel_value < 3; pixel_value++) {
-                    sum += Math.abs(solutions_pixels[s][y][x][pixel_value] - target_pixels[y][x][pixel_value]);
+                    sum += Math.abs(solutions.pixels[s][y][x][pixel_value] - target_pixels[y][x][pixel_value]);
                 }
             }
         }
@@ -46,8 +46,8 @@ const evaluateFitnessForPopulation = gpu.createKernel(function(solutions_pixels,
     }
     return sum;*/
 }, {
-    constants: { width: 300, height: 200, population_size: 50 },
-    output: [50]
+    constants: { width: 300, height: 200 },
+    output: [population_size]
 });
 
 
