@@ -1,30 +1,7 @@
-import { difference_between_images, sum_of_array_elements } from "./utils.js";
+import { calculateDifferences, sumDifferences, difference_between_images, sum_of_array_elements } from "./utils.js";
 
 
-const gpu = new GPU();
 
-const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
-    let sum=0;
-    for(let pixel_value=0; pixel_value<3; pixel_value++) {
-        sum += Math.abs(current_pixels[this.thread.y][this.thread.x][pixel_value] - target_pixels[this.thread.y][this.thread.x][pixel_value]);
-    }
-    return sum;
-}, {
-    output: [300, 200]
-});
-
-const sumDifferences = gpu.createKernel(function(differences) {
-    let sum=0;
-    for(let y=0; y<this.constants.height; y++) {
-        for (let x=0; x<this.constants.width; x++) {
-            sum += differences[y][x];
-        }
-    }
-    return sum;
-}, {
-    constants: { width: 300, height: 200 },
-    output: [1]
-});
 
 
 class ImageSolution {
@@ -87,7 +64,7 @@ class ImageSolution {
 
         const differences = calculateDifferences(this.pixels, target_solution.pixels);
         const sum_of_differences_pixels = sumDifferences(differences)[0];
-        console.log('evaluated:', sum_of_differences_pixels);
+        //console.log('evaluated:', sum_of_differences_pixels);
         return sum_of_differences_pixels;
         
         
