@@ -61,19 +61,19 @@ class ImageSolution {
         let HIG = this.height;
 
         const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
-            let sum = 0;
-            sum += Math.abs(current_pixels[this.thread.y][this.thread.x][0] - target_pixels[this.thread.y][this.thread.x][0]);
-            sum += Math.abs(current_pixels[this.thread.y][this.thread.x][1] - target_pixels[this.thread.y][this.thread.x][1]);
-            sum += Math.abs(current_pixels[this.thread.y][this.thread.x][2] - target_pixels[this.thread.y][this.thread.x][2]);
+            let sum=0;
+            for(let pixel_value=0; pixel_value<3; pixel_value++) {
+                sum += Math.abs(current_pixels[this.thread.y][this.thread.x][pixel_value] - target_pixels[this.thread.y][this.thread.x][pixel_value]);
+            }
             return sum;
         }, {
             output: [WID, HIG]
         });
         
         const sumDifferences = gpu.createKernel(function(differences) {
-            let sum = 0;
-            for (let y = 0; y < this.constants.height; y++) {
-                for (let x = 0; x < this.constants.width; x++) {
+            let sum=0;
+            for(let y=0; y<this.constants.height; y++) {
+                for (let x=0; x<this.constants.width; x++) {
                     sum += differences[y][x];
                 }
             }
@@ -85,6 +85,7 @@ class ImageSolution {
 
         const differences = calculateDifferences(this.pixels, target_solution.pixels);
         const sum_of_differences_pixels = sumDifferences(differences)[0];
+        console.log('evaluated:', sum_of_differences_pixels);
         return sum_of_differences_pixels;
         
         
