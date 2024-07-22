@@ -17,7 +17,7 @@ const calculateAndSumDifferences = gpu.createKernel(function(current_pixels, tar
     }
     return sum;
 }, {
-    constants: { width: WID, height: HIG },
+    constants: { width: 300, height: 200 },
     output: [1]
 });
 
@@ -32,7 +32,7 @@ const evaluateFitnessForPopulation = gpu.createKernel(function(solutions_pixels,
     }
     return sum;
 }, {
-    constants: { width: WID, height: HIG },
+    constants: { width: 300, height: 200 },
     output: [this.constants.population_size]
 });
 
