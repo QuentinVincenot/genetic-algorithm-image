@@ -1,4 +1,4 @@
-import { calculateAndSumDifferences, calculateDifferences, sumDifferences, difference_between_images, sum_of_array_elements } from "./utils.js";
+import { calculateAndSumDifferences, evaluateFitnessForPopulation, difference_between_images, sum_of_array_elements } from "./utils.js";
 
 
 
@@ -169,10 +169,30 @@ class ImagePopulation {
     }
 
     evaluate_solutions_fitness(target_solution) {
-        // Evaluate the fitness of every solution in the population
+        
+        
+        // Convertir les solutions en format compatible pour GPU
+        const solutions_pixels = this.solutions.map(solution => solution.pixels);
+        const target_pixels = target_solution.pixels;
+
+        // Évaluer la fitness de chaque solution
+        const solutions_fitness = evaluateFitnessForPopulation(solutions_pixels, target_pixels);
+        
+        // Assigner les résultats aux solutions_fitness
+        for (let i = 0; i < this.solutions.length; i++) {
+            this.solutions_fitness[i] = solutions_fitness[i];
+        }
+        
+        
+        
+        
+        
+        
+        
+        /*// Evaluate the fitness of every solution in the population
         for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.solutions[i].evaluate_fitness(target_solution);
-        }
+        }*/
     }
 
     best_fitness() {
