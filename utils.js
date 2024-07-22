@@ -1,4 +1,4 @@
-export { difference_between_images, sum_of_array_elements };
+export { difference_between_images, sum_of_array_elements, calculateDifferences, sumDifferences };
 
 
 const gpu = new GPU();
