@@ -53,7 +53,28 @@ class ImageSolution {
     }
 
     evaluate_fitness(target_solution) {
-        // Compute the sum of differences in all pixels of both solutions, element-wise
+        const gpu = new GPU();
+
+        const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
+            let sum = 0;
+            for (let row = 0; row < this.constants.height; row++) {
+                for (let col = 0; col < this.constants.width; col++) {
+                    for (let pixel_value = 0; pixel_value < 3; pixel_value++) {
+                        sum += Math.abs(current_pixels[row][col][pixel_value] - target_pixels[row][col][pixel_value]);
+                    }
+                }
+            }
+            return sum;
+        }, {
+            constants: { width: this.width, height: this.height }
+        }).setOutput([1]);
+    
+        const sum_of_differences_pixels = calculateDifferences(this.pixels, target_solution.pixels)[0];
+        return sum_of_differences_pixels;
+        
+        
+
+        /*// Compute the sum of differences in all pixels of both solutions, element-wise
         let sum_of_differences_pixels = 0;
         for(let row=0; row<this.height; row++) {
             for(let col=0; col<this.width; col++) {
@@ -64,7 +85,7 @@ class ImageSolution {
             }
         }
         // Return the fitness of the current solution defined as sum of absolute differences between images, pixel-wise
-        return sum_of_differences_pixels;
+        return sum_of_differences_pixels;*/
     }
 }
 
