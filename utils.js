@@ -47,7 +47,7 @@ const evaluateFitnessForPopulation = gpu.createKernel(function(solutions, target
     return sum;*/
 }, {
     constants: { width: 300, height: 200 },
-    output: [population_size]
+    output: [50]
 });
 
 
