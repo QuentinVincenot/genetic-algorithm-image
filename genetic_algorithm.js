@@ -3,6 +3,29 @@ import { difference_between_images, sum_of_array_elements } from "./utils.js";
 
 const gpu = new GPU();
 
+const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
+    let sum=0;
+    for(let pixel_value=0; pixel_value<3; pixel_value++) {
+        sum += Math.abs(current_pixels[this.thread.y][this.thread.x][pixel_value] - target_pixels[this.thread.y][this.thread.x][pixel_value]);
+    }
+    return sum;
+}, {
+    output: [300, 200]
+});
+
+const sumDifferences = gpu.createKernel(function(differences) {
+    let sum=0;
+    for(let y=0; y<this.constants.height; y++) {
+        for (let x=0; x<this.constants.width; x++) {
+            sum += differences[y][x];
+        }
+    }
+    return sum;
+}, {
+    constants: { width: 300, height: 200 },
+    output: [1]
+});
+
 
 class ImageSolution {
     constructor(width, height, pixels = null) {
@@ -57,31 +80,10 @@ class ImageSolution {
 
     evaluate_fitness(target_solution) {
 
-        let WID = this.width;
-        let HIG = this.height;
+        //let WID = this.width;
+        //let HIG = this.height;
 
-        const calculateDifferences = gpu.createKernel(function(current_pixels, target_pixels) {
-            let sum=0;
-            for(let pixel_value=0; pixel_value<3; pixel_value++) {
-                sum += Math.abs(current_pixels[this.thread.y][this.thread.x][pixel_value] - target_pixels[this.thread.y][this.thread.x][pixel_value]);
-            }
-            return sum;
-        }, {
-            output: [WID, HIG]
-        });
         
-        const sumDifferences = gpu.createKernel(function(differences) {
-            let sum=0;
-            for(let y=0; y<this.constants.height; y++) {
-                for (let x=0; x<this.constants.width; x++) {
-                    sum += differences[y][x];
-                }
-            }
-            return sum;
-        }, {
-            constants: { width: WID, height: HIG },
-            output: [1]
-        });
 
         const differences = calculateDifferences(this.pixels, target_solution.pixels);
         const sum_of_differences_pixels = sumDifferences(differences)[0];
