@@ -1,7 +1,7 @@
 export { calculateAndSumDifferences, evaluateFitnessForPopulation, difference_between_images, sum_of_array_elements };
 
 
-const gpu = new GPU();
+/*const gpu = new GPU();
 
 
 
@@ -44,11 +44,11 @@ const evaluateFitnessForPopulation = gpu.createKernel(function(solutions, target
             }
         }
     }
-    return sum;*/
+    return sum;
 }, {
     constants: { width: 300, height: 200 },
     output: [50]
-});
+});*/
 
 
 

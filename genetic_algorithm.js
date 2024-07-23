@@ -62,8 +62,9 @@ class ImageSolution {
 
         
 
-        const sum_of_differences_pixels = calculateAndSumDifferences(this.pixels, target_solution.pixels)[0];
-        return sum_of_differences_pixels;
+        //const sum_of_differences_pixels = calculateAndSumDifferences(this.pixels, target_solution.pixels)[0];
+        //return sum_of_differences_pixels;
+        return -1;
         
         
 
