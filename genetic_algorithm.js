@@ -22,11 +22,11 @@ const gpu = new GPU();
 .setOutput([5, 3, 3]);*/
 
 
-const diffPixelsKernel = gpu.createKernel(function(solutions, target_solution) {
+const diffPixelsKernel = gpu.createKernel(function(solution, target_solution) {
     // Calculate the fitness of each solution by comparing with the target solution
-    return solutions[this.thread.z][this.thread.x][this.thread.y] - target_solution[this.thread.x][this.thread.y];
+    return solution[this.thread.x][this.thread.y] - target_solution[this.thread.x][this.thread.y];
 })
-.setOutput([50, 300, 200]);
+.setOutput([300, 200]);
 
 
 class ImageSolution {
