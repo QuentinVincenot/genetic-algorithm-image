@@ -9,11 +9,17 @@ const gpu = new GPU();
 })
 .setOutput([10]);*/
 
-const diffMatricesKernel = gpu.createKernel(function(matrix1, matrix2) {
+/*const diffMatricesKernel = gpu.createKernel(function(matrix1, matrix2) {
     // Calculate the fitness of each solution by comparing with the target solution
     return matrix1[this.thread.x][this.thread.y] - matrix2[this.thread.x][this.thread.y];
 })
-.setOutput([3, 3]);
+.setOutput([3, 3]);*/
+
+const diffMatricesReferenceKernel = gpu.createKernel(function(matrices, reference) {
+    // Calculate the fitness of each solution by comparing with the target solution
+    return matrices[this.thread.z][this.thread.x][this.thread.y] - reference[this.thread.x][this.thread.y];
+})
+.setOutput([5, 3, 3]);
 
 
 class ImageSolution {
@@ -198,11 +204,26 @@ class ImagePopulation {
         const differences = differenceKernel(array1, array2);
         console.log(differences);*/
 
-
-        const matrix1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        /*const matrix1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
         const matrix2 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
         const differences = diffMatricesKernel(matrix1, matrix2);
+        console.log(differences);*/
+
+
+        const matrices = [
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        ];
+        const reference = [[7, 7, 7], [7, 7, 7], [7, 7, 7]];
+        const differences = diffMatricesReferenceKernel(matrices, reference);
         console.log(differences);
+
+
+
+
         
         
         /*// Evaluate the fitness of every solution in the population
