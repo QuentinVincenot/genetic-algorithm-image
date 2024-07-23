@@ -235,7 +235,7 @@ class ImagePopulation {
         console.log(flattened_solutions);
 
 
-        diffPixelsKernel.setOutput([this.solutions.length, 200, 300]);
+        diffPixelsKernel.setOutput([flattened_solutions.length, 200, 300]);
 
         const pixels_differences = diffPixelsKernel(flattened_solutions, target_solution.pixels);
         console.log(pixels_differences);
