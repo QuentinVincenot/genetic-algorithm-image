@@ -1,4 +1,4 @@
-import { calculateAndSumDifferences, evaluateFitnessForPopulation, difference_between_images, sum_of_array_elements } from "./utils.js";
+import { /*calculateAndSumDifferences, evaluateFitnessForPopulation,*/ difference_between_images, sum_of_array_elements } from "./utils.js";
 
 
 
