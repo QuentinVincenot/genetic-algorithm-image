@@ -171,7 +171,7 @@ class ImagePopulation {
     evaluate_solutions_fitness(target_solution) {
         
         
-        // Convertir les solutions en format compatible pour GPU
+        /*// Convertir les solutions en format compatible pour GPU
         const target_pixels = target_solution.pixels;
 
         // Évaluer la fitness de chaque solution
@@ -180,7 +180,7 @@ class ImagePopulation {
         // Assigner les résultats aux solutions_fitness
         for (let i = 0; i < this.solutions.length; i++) {
             this.solutions_fitness[i] = solutions_fitness[i];
-        }
+        }*/
         
         
         
@@ -188,10 +188,10 @@ class ImagePopulation {
         
         
         
-        /*// Evaluate the fitness of every solution in the population
+        // Evaluate the fitness of every solution in the population
         for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.solutions[i].evaluate_fitness(target_solution);
-        }*/
+        }
     }
 
     best_fitness() {
