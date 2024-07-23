@@ -1,7 +1,13 @@
 import { /*calculateAndSumDifferences, evaluateFitnessForPopulation,*/ difference_between_images, sum_of_array_elements } from "./utils.js";
 
 
+const gpu = new GPU();
 
+const differenceKernel = gpu.createKernel(function(array1, array2) {
+    // Calculate the fitness of each solution by comparing with the target solution
+    return array1[this.thread.x] - array2[this.thread.x];
+})
+.setOutput([10]);
 
 
 class ImageSolution {
@@ -60,14 +66,10 @@ class ImageSolution {
         //let WID = this.width;
         //let HIG = this.height;
 
-        
-
         //const sum_of_differences_pixels = calculateAndSumDifferences(this.pixels, target_solution.pixels)[0];
         //return sum_of_differences_pixels;
         return -1;
         
-        
-
         /*// Compute the sum of differences in all pixels of both solutions, element-wise
         let sum_of_differences_pixels = 0;
         for(let row=0; row<this.height; row++) {
@@ -185,14 +187,16 @@ class ImagePopulation {
         
         
         
+        const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const array2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+        const differences = differenceKernel(array1, array2);
+        console.log(differences);
         
         
-        
-        
-        // Evaluate the fitness of every solution in the population
+        /*// Evaluate the fitness of every solution in the population
         for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.solutions[i].evaluate_fitness(target_solution);
-        }
+        }*/
     }
 
     best_fitness() {
