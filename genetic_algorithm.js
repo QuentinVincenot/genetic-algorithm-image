@@ -26,7 +26,7 @@ const diffPixelsKernel = gpu.createKernel(function(flattened_solutions, target_s
     // Calculate the fitness of each solution by comparing with the target solution
     return flattened_solutions[this.thread.z][this.thread.x][this.thread.y] - target_solution[this.thread.x][this.thread.y];
 })
-.setOutput([3, 200, 300]);
+.setOutput([50, 200, 300]);
 
 
 class ImageSolution {
