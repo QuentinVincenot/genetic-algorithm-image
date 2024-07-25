@@ -161,26 +161,15 @@ class ImagePopulation {
         // Define a combined kernel to calculate the absolute differences and sum them
         this.allInOneSumKernel = gpu.createKernel(function(matrices, reference) {
             let sum = 0;
-            // Loop through the height, width, channels, and the additional dimension
-            for (let y = 0; y < this.constants.height; y++) {
-                for (let z = 0; z < this.constants.width; z++) {
-                    for (let w = 0; w < 3; w++) { // Assuming RGB channels
-                        // Calculate the absolute difference for the first three dimensions
-                        const diff = Math.abs(matrices[this.thread.x][y][z][w][0] - reference[y][z][w][0]);
-                        sum += diff;
-                        // The fourth dimension is constant, no need to compare
-                        // Assuming 255 for the new dimension across both matrices and reference
-                        // Optionally include in the calculation if needed
-                    }
-                }
+            const index = this.thread.x * 4; // Calculate starting index for each 2x2 matrix in flattened array
+            for (let i = 0; i < 4; i++) {
+                // Compute the absolute difference for each element
+                const diff = Math.abs(matrices[index + i] - reference[i]);
+                sum += diff;
             }
             return sum;
         })
-        .setOutput([5]) // Output size for the sum of differences for each solution
-        .setConstants({
-            height: 3,
-            width: 3
-        });
+        .setOutput([3]);
 
 
 
@@ -293,40 +282,18 @@ class ImagePopulation {
 
 
         const matrices = [
-            [
-                [[2, 2, 2, 255], [2, 2, 2, 255], [2, 2, 2, 255]],
-                [[2, 2, 2, 255], [2, 2, 2, 255], [2, 2, 2, 255]],
-                [[2, 2, 2, 255], [2, 2, 2, 255], [2, 2, 2, 255]]
-            ],
-            [
-                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]],
-                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]],
-                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]]
-            ],
-            [
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]]
-            ],
-            [
-                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]],
-                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]],
-                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]]
-            ],
-            [
-                [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]],
-                [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]],
-                [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]]
-            ]
-        ];
-        const reference = [
-            [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-            [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-            [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]]
+            1, 2, 3, 4,  // First matrix (2x2)
+            5, 6, 7, 8,  // Second matrix (2x2)
+            9, 10, 11, 12 // Third matrix (2x2)
         ];
         
+        const reference = [
+            2, 3, 4, 5  // Reference matrix (2x2) flattened
+        ];
+
         // Execute the combined kernel
         const fitnesses_results = this.allInOneSumKernel(matrices, reference);
+
         console.log(fitnesses_results);
 
 
