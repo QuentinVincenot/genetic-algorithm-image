@@ -290,7 +290,7 @@ class ImagePopulation {
             [[2, 2, 2], [2, 2, 2], [2, 2, 2]]
         ];
         const reference = [[7, 7, 7], [7, 7, 7], [7, 7, 7]];
-        const fitnesses_results = allInOneKernel(matrices, reference);
+        const fitnesses_results = this.allInOneKernel(matrices, reference);
         console.log(fitnesses_results);
 
 
