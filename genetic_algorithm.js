@@ -146,9 +146,9 @@ class ImagePopulation {
 
         this.parallelSum = gpu.createKernel(function(differenceImages) {
             let all_sums = new Array(number_of_solutions + crossover_number).fill(0);
-            all_sums[this.thread.x] += differenceImages[0][this.thread.x][y][x];
-            all_sums[this.thread.x] += differenceImages[1][this.thread.x][y][x];
-            all_sums[this.thread.x] += differenceImages[2][this.thread.x][y][x];
+            all_sums[this.thread.x] += differenceImages[0][this.thread.x][this.thread.y][this.thread.z];
+            all_sums[this.thread.x] += differenceImages[1][this.thread.x][this.thread.y][this.thread.z];
+            all_sums[this.thread.x] += differenceImages[2][this.thread.x][this.thread.y][this.thread.z];
             return all_sums;
         })
         .setOutput([number_of_solutions + crossover_number]);
