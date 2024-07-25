@@ -161,11 +161,13 @@ class ImagePopulation {
         // Define a combined kernel to calculate the absolute differences and sum them
         this.allInOneSumKernel = gpu.createKernel(function(matrices, reference) {
             let sum = 0;
-            const index = this.thread.x * 4; // Calculate starting index for each 2x2 matrix in flattened array
-            for (let i = 0; i < 4; i++) {
-                // Compute the absolute difference for each element
-                const diff = Math.abs(matrices[index + i] - reference[i]);
-                sum += diff;
+            // Iterate over each element in the 2x2 matrix
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    // Compute the absolute difference for each element
+                    const diff = Math.abs(matrices[this.thread.x][i][j] - reference[i][j]);
+                    sum += diff;
+                }
             }
             return sum;
         })
@@ -282,13 +284,23 @@ class ImagePopulation {
 
 
         const matrices = [
-            1, 2, 3, 4,  // First matrix (2x2)
-            5, 6, 7, 8,  // Second matrix (2x2)
-            9, 10, 11, 12 // Third matrix (2x2)
+            [
+                [1, 2], // First row of the first matrix
+                [3, 4]  // Second row of the first matrix
+            ],
+            [
+                [5, 6], // First row of the second matrix
+                [7, 8]  // Second row of the second matrix
+            ],
+            [
+                [9, 10], // First row of the third matrix
+                [11, 12] // Second row of the third matrix
+            ]
         ];
         
         const reference = [
-            2, 3, 4, 5  // Reference matrix (2x2) flattened
+            [2, 3], // First row of the reference matrix
+            [4, 5]  // Second row of the reference matrix
         ];
 
         // Execute the combined kernel
