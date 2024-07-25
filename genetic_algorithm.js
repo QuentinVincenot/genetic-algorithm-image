@@ -123,18 +123,18 @@ class ImagePopulation {
             return [
                 flattened_solutions[this.thread.z][this.thread.x][this.thread.y][0] - target_solution[this.thread.x][this.thread.y][0],
                 flattened_solutions[this.thread.z][this.thread.x][this.thread.y][1] - target_solution[this.thread.x][this.thread.y][1],
-                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][2] - target_solution[this.thread.x][this.thread.y][2],
+                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][2] - target_solution[this.thread.x][this.thread.y][2]
             ];
         })
-        .setOutput([3, number_of_solutions + crossover_number, images_width, images_height]);
+        .setOutput([3, number_of_solutions + crossover_number, images_height, images_width]);
         
         this.sumAllPixelsKernel = gpu.createKernel(function(differenceImage) {
             let sum = 0;
-            for (let x = 0; x < this.constants.width; x++) {
-                for (let y = 0; y < this.constants.height; y++) {
-                    sum += differenceImage[0][x][y];
-                    sum += differenceImage[1][x][y];
-                    sum += differenceImage[2][x][y];
+            for (let y = 0; y < this.constants.height; y++) {
+                for (let x = 0; x < this.constants.width; x++) {
+                    sum += differenceImage[0][y][x];
+                    sum += differenceImage[1][y][x];
+                    sum += differenceImage[2][y][x];
                 }
             }
             return sum;
@@ -217,11 +217,6 @@ class ImagePopulation {
 
     evaluate_solutions_fitness(target_solution) {
 
-        if(this.solutions_fitness[0] === Math.pow(10, 12)) {
-            this.solutions_fitness[0] = -1;
-        }
-        
-        
         /*// Convertir les solutions en format compatible pour GPU
         const target_pixels = target_solution.pixels;
 
@@ -283,7 +278,7 @@ class ImagePopulation {
         if(this.solutions_fitness[0] === -1) {
             return {'best_solution': this.solutions[0], 'best_fitness': this.solutions_fitness[0]};
         }
-        
+
         // Determine the lowest fitness among all population solutions fitness scores
         let best_fitness = Math.min(...this.solutions_fitness);
         // Determine the solution in the population that holds this fitness score
