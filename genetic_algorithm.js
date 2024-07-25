@@ -277,10 +277,19 @@ class ImagePopulation {
     }
 
     best_fitness() {
+        
+        console.log('best_fitness 1', this.solutions.length, this.solutions_fitness);
+        console.log('best_fitness 11', this.solutions);
+
         // Determine the lowest fitness among all population solutions fitness scores
         let best_fitness = Math.min(...this.solutions_fitness);
+
+        console.log('best_fitness 2', best_fitness);
+
         // Determine the solution in the population that holds this fitness score
         let best_solution = this.solutions[this.solutions_fitness.indexOf(best_fitness)];
+
+        console.log('best_fitness 3', best_solution);
 
         // Return the solution, and its fitness score, that corresponds to the best fitting image
         return {'best_solution': best_solution, 'best_fitness': best_fitness};
