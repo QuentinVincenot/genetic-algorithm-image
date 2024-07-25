@@ -73,8 +73,6 @@ start_button.addEventListener('click', () => {
             ALGO_CROSSOVER_NUMBER, ALGO_MUTATION_FACTOR);
     }
     
-    console.log(ALGO_POPULATION.solutions);
-    console.log(ALGO_POPULATION.solutions_fitness);
     // Retrieve the first solution as the starting best fitness among all currently available solutions
     ALGO_BEST_SOLUTION = ALGO_POPULATION.solutions[0];
     ALGO_BEST_FITNESS = ALGO_POPULATION.solutions_fitness[0];
