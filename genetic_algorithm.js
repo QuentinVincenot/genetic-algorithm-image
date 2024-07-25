@@ -315,8 +315,8 @@ class ImagePopulation {
         ];
 
         let fitnesses = [];
-        for(let i=0; i<matrices.length; i++) {
-            let fitness = this.allInOneSumKernel(matrices[i], reference);
+        for(let i=0; i<this.solutions.length; i++) {
+            let fitness = this.allInOneSumKernel(this.solutions[i].pixels, target_solution.pixels)[0];
             fitnesses.push(fitness);
         }
         console.log(fitnesses);
