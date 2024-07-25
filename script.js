@@ -130,14 +130,17 @@ function updateCanvas() {
         // Select the population to keep only the fittess solutions found
         ALGO_POPULATION.select_population();
 
+        
+        console.log('After selection', ALGO_POPULATION.solutions);
+        console.log(ALGO_POPULATION.solutions_fitness);
+
         // Retrieve the solution of the current population, and update the canvas if a fitter solution has been found
         let best_fitness_element = ALGO_POPULATION.best_fitness();
+        console.log('Best', best_fitness_element)
         if(best_fitness_element['best_fitness'] < ALGO_BEST_FITNESS) {
             // Retrieve the solution image and its corresponding fitness
             ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
             ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
-            console.log(ALGO_BEST_SOLUTION);
-            console.log('Best', ALGO_BEST_FITNESS);
 
             // Draw the best solution image in the best found solution image canvas
             draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
