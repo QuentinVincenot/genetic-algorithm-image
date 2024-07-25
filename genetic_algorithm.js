@@ -144,6 +144,17 @@ class ImagePopulation {
 
 
 
+        this.parallelSum = gpu.createKernel(function(differenceImages) {
+            let all_sums = new Array(number_of_solutions + crossover_number).fill(0);
+            all_sums[this.thread.x] += differenceImages[0][this.thread.x][y][x];
+            all_sums[this.thread.x] += differenceImages[1][this.thread.x][y][x];
+            all_sums[this.thread.x] += differenceImages[2][this.thread.x][y][x];
+            return all_sums;
+        })
+        .setOutput([number_of_solutions + crossover_number]);
+
+
+
     }
 
     initialize_population() {
@@ -259,11 +270,12 @@ class ImagePopulation {
         
         const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
 
-        for(let i=0; i<this.solutions.length; i++) {
+        /*for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i])[0];
-        }
-
-        //console.log('After eval', this.solutions_fitness);
+        }*/
+        
+        this.solutions_fitness = this.parallelSum(pixels_differences);
+        console.log('After eval', this.solutions_fitness);
 
 
 
