@@ -280,6 +280,10 @@ class ImagePopulation {
     }
 
     best_fitness() {
+        if(this.solutions_fitness[0] === -1) {
+            return {'best_solution': this.solutions[0], 'best_fitness': this.solutions_fitness[0]};
+        }
+        
         // Determine the lowest fitness among all population solutions fitness scores
         let best_fitness = Math.min(...this.solutions_fitness);
         // Determine the solution in the population that holds this fitness score
