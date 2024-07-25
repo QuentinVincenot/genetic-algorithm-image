@@ -267,13 +267,14 @@ class ImagePopulation {
         const flattened_solutions = this.solutions.map(solution => solution.pixels);
         
         const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
+        console.log('Pixels diff', pixels_differences);
 
         /*for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i])[0];
         }*/
         
-        this.solutions_fitness = this.parallelSum(pixels_differences);
-        console.log('After eval', this.solutions_fitness);
+        const parallel_sum_result = this.parallelSum(pixels_differences);
+        console.log('Parallel sum', parallel_sum_result);
 
 
 
