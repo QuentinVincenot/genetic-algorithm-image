@@ -175,6 +175,23 @@ class ImagePopulation {
 
 
 
+        this.sumDifferencesKernel = gpu.createKernel(function(flatMatrices, flatReference, matrixDimensions) {
+            const [numMatrices, height, width, channels] = matrixDimensions;
+        
+            const matrixIndex = this.thread.x;
+            const index = this.thread.y * width * channels + this.thread.z * channels + this.thread.w;
+
+            const matrixOffset = matrixIndex * height * width * channels;
+            const matrixValue = flatMatrices[matrixOffset + index];
+            const referenceValue = flatReference[index];
+
+            const diff = Math.abs(matrixValue - referenceValue);
+            return diff;
+        })
+        .setOutput([5]);
+
+
+
     }
 
     initialize_population() {
@@ -283,6 +300,26 @@ class ImagePopulation {
         console.log(differences);*/
 
 
+        function flattenMatrix(matrix) {
+            // Convertit la matrice en un tableau unidimensionnel en utilisant JSON.stringify et Array.prototype.flat
+            return matrix.flat(Infinity);
+        }
+
+        function unflattenMatrix(flatArray, dimensions) {
+            const [numObjects, height, width, channels] = dimensions;
+        
+            function buildSubArray(array, dimensions) {
+                const [firstDim, ...restDims] = dimensions;
+                const subArrays = [];
+                for (let i = 0; i < firstDim; i++) {
+                    subArrays.push(restDims.length === 0 ? array[i] : buildSubArray(array[i], restDims));
+                }
+                return subArrays;
+            }
+        
+            return buildSubArray(flatArray, dimensions);
+        }
+        
         const matrices = [
             [
                 [[1, 1, 1, 255], [1, 1, 1, 255]],
@@ -313,7 +350,7 @@ class ImagePopulation {
         ];
 
         // Execute the combined kernel
-        const fitnesses_results = this.allInOneSumKernel(matrices, reference);
+        const fitnesses_results = this.sumDifferencesKernel(flattenMatrix(matrices), flattenMatrix(reference));
 
         console.log(fitnesses_results);
 
