@@ -120,15 +120,14 @@ class ImagePopulation {
 
         this.diffPixelsKernel = gpu.createKernel(function(flattened_solutions, target_solution) {
             // Calculate the fitness of each solution by comparing with the target solution
-            return [
-                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][0] - target_solution[this.thread.x][this.thread.y][0],
-                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][1] - target_solution[this.thread.x][this.thread.y][1],
-                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][2] - target_solution[this.thread.x][this.thread.y][2]
-            ];
+            return Math.abs(
+                flattened_solutions[this.thread.w][this.thread.x][this.thread.y][this.thread.z] -
+                target_solution[this.thread.x][this.thread.y][this.thread.z]
+            );
         })
-        .setOutput([3, number_of_solutions + crossover_number, images_height, images_width]);
+        .setOutput([number_of_solutions + crossover_number, images_height, images_width, 3]);
         
-        this.sumAllPixelsKernel = gpu.createKernel(function(differenceImage) {
+        /*this.sumAllPixelsKernel = gpu.createKernel(function(differenceImage) {
             let sum = 0;
             for (let y = 0; y < this.constants.height; y++) {
                 for (let x = 0; x < this.constants.width; x++) {
@@ -140,16 +139,21 @@ class ImagePopulation {
             return sum;
         })
         .setOutput([1])
-        .setConstants({width: images_width, height: images_height});
-
-
+        .setConstants({width: images_width, height: images_height});*/
 
         this.parallelSum = gpu.createKernel(function(differenceImages) {
-            return differenceImages[0][this.thread.x][this.thread.y][this.thread.z] + 
-                differenceImages[1][this.thread.x][this.thread.y][this.thread.z] +
-                differenceImages[2][this.thread.x][this.thread.y][this.thread.z];
+            let sum = 0;
+            for (let x = 0; x < this.constants.height; x++) {
+                for (let y = 0; y < this.constants.width; y++) {
+                    for (let z = 0; z < 3; z++) {
+                        sum += differenceImages[this.thread.x][x][y][z];
+                    }
+                }
+            }
+            return sum;
         })
-        .setOutput([number_of_solutions + crossover_number]);
+        .setOutput([number_of_solutions + crossover_number])
+        .setConstants({height: images_height, width: images_width});
 
 
 
