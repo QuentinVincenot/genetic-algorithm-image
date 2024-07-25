@@ -162,8 +162,8 @@ class ImagePopulation {
             let sum = 0;
             for (let y = 0; y < 3; y++) {
                 for (let z = 0; z < 3; z++) {
-                    for (let w = 0; w < 4; w++) {
-                        const diff = Math.abs(matrices[this.thread.x][y][z][w] - reference[y][z][w]);
+                    for (let c = 0; c < 3; c++) {
+                        const diff = Math.abs(matrices[this.thread.x][y][z][c][0] - reference[y][z][c][0]);
                         sum += diff;
                     }
                 }
