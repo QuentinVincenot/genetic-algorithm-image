@@ -118,14 +118,14 @@ class ImagePopulation {
 
 
 
-        this.diffPixelsKernel = gpu.createKernel(function(flattened_solutions, target_solution) {
+        /*this.diffPixelsKernel = gpu.createKernel(function(flattened_solutions, target_solution) {
             // Calculate the fitness of each solution by comparing with the target solution
             return Math.abs(
                 flattened_solutions[this.thread.w][this.thread.x][this.thread.y][this.thread.z] -
                 target_solution[this.thread.x][this.thread.y][this.thread.z]
             );
         })
-        .setOutput([number_of_solutions + crossover_number, images_height, images_width, 3]);
+        .setOutput([number_of_solutions + crossover_number, images_height, images_width, 3]);*/
         
         /*this.sumAllPixelsKernel = gpu.createKernel(function(differenceImage) {
             let sum = 0;
@@ -141,7 +141,7 @@ class ImagePopulation {
         .setOutput([1])
         .setConstants({width: images_width, height: images_height});*/
 
-        this.parallelSum = gpu.createKernel(function(differenceImages) {
+        /*this.parallelSum = gpu.createKernel(function(differenceImages) {
             let sum = 0;
             for (let x = 0; x < this.constants.height; x++) {
                 for (let y = 0; y < this.constants.width; y++) {
@@ -153,8 +153,7 @@ class ImagePopulation {
             return sum;
         })
         .setOutput([number_of_solutions + crossover_number])
-        .setConstants({height: images_height, width: images_width});
-
+        .setConstants({height: images_height, width: images_width});*/
 
 
 
@@ -166,6 +165,29 @@ class ImagePopulation {
                     for (let k = 0; k < 4; k++) {
                         const diff = Math.abs(matrices[i][j][k] - reference[i][j][k]);
                         sum += diff;
+                    }
+                }
+            }
+            return sum;
+        })
+        .setOutput([1]);
+
+
+
+        this.diffKernel = gpu.createKernel(function(matrices, reference) {
+            const i = this.thread.x;
+            const j = this.thread.y;
+            const k = this.thread.z;
+            return Math.abs(matrices[i][j][k] - reference[i][j][k]);
+        })
+        .setOutput([200, 300, 4]);
+
+        this.sumKernel = gpu.createKernel(function(differences) {
+            let sum = 0;
+            for (let i = 0; i < differences.length; i++) {
+                for (let j = 0; j < differences[0].length; j++) {
+                    for (let k = 0; k < differences[0][0].length; k++) {
+                        sum += differences[i][j][k];
                     }
                 }
             }
@@ -285,7 +307,7 @@ class ImagePopulation {
 
         
         
-        const matrices = [
+        /*const matrices = [
             [
                 [[1, 1, 1, 255], [1, 1, 1, 255]],
                 [[1, 1, 1, 255], [1, 1, 1, 255]]
@@ -312,13 +334,15 @@ class ImagePopulation {
         const reference = [
             [[2, 2, 2, 255], [2, 2, 2, 255]], // First row of the reference matrix
             [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
-        ];
+        ];*/
 
         console.log(target_solution.pixels);
 
         let fitnesses = [];
         for(let i=0; i<this.solutions.length; i++) {
-            let fitness = this.allInOneSumKernel(this.solutions[i].pixels, target_solution.pixels)[0];
+            //let fitness = this.allInOneSumKernel(this.solutions[i].pixels, target_solution.pixels)[0];
+            let differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
+            let fitness = this.sumKernel(differences)[0];
             fitnesses.push(fitness);
         }
         console.log(fitnesses);
