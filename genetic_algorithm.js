@@ -163,30 +163,14 @@ class ImagePopulation {
             let sum = 0;
             for (let i = 0; i < 2; i++) {
                 for (let j = 0; j < 2; j++) {
-                    const diff = Math.abs(matrices[this.thread.x][i][j] - reference[i][j]);
+                    for (let k = 0; k < 4; k++) {
+                    const diff = Math.abs(matrices[i][j][k] - reference[i][j][k]);
                     sum += diff;
                 }
             }
             return sum;
         })
-        .setOutput([5]);
-
-
-
-        this.sumDifferencesKernel = gpu.createKernel(function(flatMatrices, flatReference, matrixDimensions) {
-            const [numMatrices, height, width, channels] = matrixDimensions;
-        
-            const matrixIndex = this.thread.x;
-            const index = this.thread.y * width * channels + this.thread.z * channels + this.thread.w;
-
-            const matrixOffset = matrixIndex * height * width * channels;
-            const matrixValue = flatMatrices[matrixOffset + index];
-            const referenceValue = flatReference[index];
-
-            const diff = Math.abs(matrixValue - referenceValue);
-            return diff;
-        })
-        .setOutput([5]);
+        .setOutput([1]);
 
 
 
@@ -298,39 +282,7 @@ class ImagePopulation {
         console.log(differences);*/
 
 
-        function flattenInnermostLevel(matrix) {
-            // Vérifie si le tableau contient des tableaux
-            if (Array.isArray(matrix[0])) {
-                // Aplatir le niveau le plus intérieur
-                return matrix.map(subArray => {
-                    if (Array.isArray(subArray[0])) {
-                        // Appel récursif pour traiter les sous-tableaux multidimensionnels
-                        return flattenInnermostLevel(subArray);
-                    } else {
-                        // Aplatir le niveau le plus intérieur
-                        return subArray.flat();
-                    }
-                });
-            } else {
-                // Cas où la matrice est déjà un tableau unidimensionnel
-                return matrix;
-            }
-        }
-
-        function unflattenMatrix(flatArray, dimensions) {
-            const [numObjects, height, width, channels] = dimensions;
         
-            function buildSubArray(array, dimensions) {
-                const [firstDim, ...restDims] = dimensions;
-                const subArrays = [];
-                for (let i = 0; i < firstDim; i++) {
-                    subArrays.push(restDims.length === 0 ? array[i] : buildSubArray(array[i], restDims));
-                }
-                return subArrays;
-            }
-        
-            return buildSubArray(flatArray, dimensions);
-        }
         
         const matrices = [
             [
@@ -361,10 +313,12 @@ class ImagePopulation {
             [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
         ];
 
-        // Execute the combined kernel
-        const fitnesses_results = this.allInOneSumKernel(flattenInnermostLevel(matrices), flattenInnermostLevel(reference));
-
-        console.log(fitnesses_results);
+        let fitnesses = [];
+        for(let i=0; i<matrices.length; i++) {
+            let fitness = this.allInOneSumKernel(matrices[i], reference);
+            fitnesses.push(fitness);
+        }
+        console.log(fitnesses);
 
 
 
