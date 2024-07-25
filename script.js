@@ -74,7 +74,7 @@ start_button.addEventListener('click', () => {
     }
     
     // Evaluate the fitness of every randomly generated initial solutions of the algorithm
-    //ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
+    ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
     // Retrieve the solution with the best fitness among all currently available solutions
     let best_fitness_element = ALGO_POPULATION.best_fitness();
     ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
