@@ -174,14 +174,16 @@ class ImagePopulation {
 
 
 
+        // Crée un kernel pour calculer la différence absolue de chaque pixel
         this.diffKernel = gpu.createKernel(function(matrices, reference) {
-            const i = this.thread.x;
-            const j = this.thread.y;
-            const k = this.thread.z;
+            const i = this.thread.y;  // Index pour les lignes
+            const j = this.thread.x;  // Index pour les colonnes
+            const k = this.thread.z;  // Index pour les canaux (couleurs)
             return Math.abs(matrices[i][j][k] - reference[i][j][k]);
         })
-        .setOutput([200, 300, 4]);
+        .setOutput([300, 200, 4]);  // Dimensions basées sur les pixels et les canaux
 
+        // Crée un kernel pour sommer les différences
         this.sumKernel = gpu.createKernel(function(differences) {
             let sum = 0;
             for (let i = 0; i < differences.length; i++) {
@@ -339,13 +341,13 @@ class ImagePopulation {
         console.log(target_solution.pixels);
 
         let fitnesses = [];
-        for(let i=0; i<this.solutions.length; i++) {
-            //let fitness = this.allInOneSumKernel(this.solutions[i].pixels, target_solution.pixels)[0];
+        for (let i = 0; i < this.solutions.length; i++) {
             const differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
             const fitness = this.sumKernel(differences)[0];
             fitnesses.push(fitness);
         }
         console.log(fitnesses);
+
 
 
 
