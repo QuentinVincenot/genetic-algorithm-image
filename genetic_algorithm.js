@@ -158,19 +158,29 @@ class ImagePopulation {
 
 
 
-        this.allInOneKernel = gpu.createKernel(function(matrices, reference) {
+        // Define a combined kernel to calculate the absolute differences and sum them
+        this.allInOneSumKernel = gpu.createKernel(function(matrices, reference) {
             let sum = 0;
-            for (let y = 0; y < 3; y++) {
-                for (let z = 0; z < 3; z++) {
-                    for (let c = 0; c < 3; c++) {
-                        const diff = Math.abs(matrices[this.thread.x][y][z][c][0] - reference[y][z][c][0]);
+            // Loop through the height, width, channels, and the additional dimension
+            for (let y = 0; y < this.constants.height; y++) {
+                for (let z = 0; z < this.constants.width; z++) {
+                    for (let w = 0; w < 3; w++) { // Assuming RGB channels
+                        // Calculate the absolute difference for the first three dimensions
+                        const diff = Math.abs(matrices[this.thread.x][y][z][w][0] - reference[y][z][w][0]);
                         sum += diff;
+                        // The fourth dimension is constant, no need to compare
+                        // Assuming 255 for the new dimension across both matrices and reference
+                        // Optionally include in the calculation if needed
                     }
                 }
             }
             return sum;
         })
-        .setOutput([5]);
+        .setOutput([5]) // Output size for the sum of differences for each solution
+        .setConstants({
+            height: 3,
+            width: 3
+        });
 
 
 
@@ -289,24 +299,24 @@ class ImagePopulation {
                 [[2, 2, 2, 255], [2, 2, 2, 255], [2, 2, 2, 255]]
             ],
             [
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
-                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
+                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]],
+                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]],
+                [[3, 3, 3, 255], [3, 3, 3, 255], [3, 3, 3, 255]]
             ],
             [
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]]
+                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
+                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]],
+                [[4, 4, 4, 255], [4, 4, 4, 255], [4, 4, 4, 255]]
+            ],
+            [
+                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]],
+                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]],
+                [[5, 5, 5, 255], [5, 5, 5, 255], [5, 5, 5, 255]]
             ],
             [
                 [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]],
                 [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]],
                 [[6, 6, 6, 255], [6, 6, 6, 255], [6, 6, 6, 255]]
-            ],
-            [
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
-                [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]]
             ]
         ];
         const reference = [
@@ -314,7 +324,9 @@ class ImagePopulation {
             [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]],
             [[7, 7, 7, 255], [7, 7, 7, 255], [7, 7, 7, 255]]
         ];
-        const fitnesses_results = this.allInOneKernel(matrices, reference);
+        
+        // Execute the combined kernel
+        const fitnesses_results = this.allInOneSumKernel(matrices, reference);
         console.log(fitnesses_results);
 
 
