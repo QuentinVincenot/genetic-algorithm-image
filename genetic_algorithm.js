@@ -157,6 +157,23 @@ class ImagePopulation {
 
 
 
+
+        this.allInOneKernel = gpu.createKernel(function(matrices, reference) {
+            const differences = matrices[this.thread.w][this.thread.x][this.thread.y][this.thread.z] - reference[this.thread.x][this.thread.y][this.thread.z];
+            let sum = 0;
+            for (let x = 0; x < 3; x++) {
+                for (let y = 0; y < 3; y++) {
+                    for (let z = 0; z < 3; z++) {
+                        sum += differences[this.thread.x][x][y][z];
+                    }
+                }
+            }
+            return sum;
+        })
+        .setOutput([3]);
+
+
+
     }
 
     initialize_population() {
@@ -264,21 +281,36 @@ class ImagePopulation {
         const differences = diffMatricesReferenceKernel(matrices, reference);
         console.log(differences);*/
 
+
+        const matrices = [
+            [[2, 2, 2], [2, 2, 2], [2, 2, 2]],
+            [[2, 2, 2], [2, 2, 2], [2, 2, 2]],
+            [[2, 2, 2], [2, 2, 2], [2, 2, 2]],
+            [[2, 2, 2], [2, 2, 2], [2, 2, 2]],
+            [[2, 2, 2], [2, 2, 2], [2, 2, 2]]
+        ];
+        const reference = [[7, 7, 7], [7, 7, 7], [7, 7, 7]];
+        const fitnesses_results = allInOneKernel(matrices, reference);
+        console.log(fitnesses_results);
+
+
+
+
         //const flattened_solutions_pixels = this.solutions[0].map(sol => sol.pixels);
 
 
         //const flattened_solutions = [this.solutions[0].pixels, this.solutions[1].pixels, this.solutions[2].pixels];
-        const flattened_solutions = this.solutions.map(solution => solution.pixels);
+        //const flattened_solutions = this.solutions.map(solution => solution.pixels);
         
-        const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
-        console.log('Pixels diff', pixels_differences);
+        //const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
+        //console.log('Pixels diff', pixels_differences);
 
         /*for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i])[0];
         }*/
         
-        const parallel_sum_result = this.parallelSum(pixels_differences);
-        console.log('Parallel sum', parallel_sum_result);
+        //const parallel_sum_result = this.parallelSum(pixels_differences)[0];
+        //console.log('Parallel sum', parallel_sum_result);
 
 
 
