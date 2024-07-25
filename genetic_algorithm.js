@@ -164,8 +164,9 @@ class ImagePopulation {
             for (let i = 0; i < 2; i++) {
                 for (let j = 0; j < 2; j++) {
                     for (let k = 0; k < 4; k++) {
-                    const diff = Math.abs(matrices[i][j][k] - reference[i][j][k]);
-                    sum += diff;
+                        const diff = Math.abs(matrices[i][j][k] - reference[i][j][k]);
+                        sum += diff;
+                    }
                 }
             }
             return sum;
