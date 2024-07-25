@@ -136,6 +136,8 @@ function updateCanvas() {
             // Retrieve the solution image and its corresponding fitness
             ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
             ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
+            console.log(ALGO_BEST_SOLUTION);
+            console.log('Best', ALGO_BEST_FITNESS);
 
             // Draw the best solution image in the best found solution image canvas
             draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
