@@ -285,6 +285,7 @@ class ImagePopulation {
         let best_fitness = Math.min(...this.solutions_fitness);
 
         console.log('best_fitness 2', best_fitness);
+        console.log('best_fitness 21', this.solutions_fitness.indexOf(best_fitness));
 
         // Determine the solution in the population that holds this fitness score
         let best_solution = this.solutions[this.solutions_fitness.indexOf(best_fitness)];
