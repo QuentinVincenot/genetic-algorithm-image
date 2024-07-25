@@ -161,8 +161,8 @@ class ImagePopulation {
         // Define a combined kernel to calculate the absolute differences and sum them
         this.allInOneSumKernel = gpu.createKernel(function(matrices, reference) {
             let sum = 0;
-            for (let i = 0; i < 2; i++) {
-                for (let j = 0; j < 2; j++) {
+            for (let i = 0; i < 200; i++) {
+                for (let j = 0; j < 300; j++) {
                     for (let k = 0; k < 4; k++) {
                         const diff = Math.abs(matrices[i][j][k] - reference[i][j][k]);
                         sum += diff;
@@ -313,6 +313,8 @@ class ImagePopulation {
             [[2, 2, 2, 255], [2, 2, 2, 255]], // First row of the reference matrix
             [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
         ];
+
+        console.log(target_solution.pixels);
 
         let fitnesses = [];
         for(let i=0; i<this.solutions.length; i++) {
