@@ -120,17 +120,21 @@ class ImagePopulation {
 
         this.diffPixelsKernel = gpu.createKernel(function(flattened_solutions, target_solution) {
             // Calculate the fitness of each solution by comparing with the target solution
-            return flattened_solutions[this.thread.z][this.thread.x][this.thread.y][this.thread.z] - target_solution[this.thread.x][this.thread.y][this.thread.z];
+            return [
+                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][0] - target_solution[this.thread.x][this.thread.y][0],
+                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][1] - target_solution[this.thread.x][this.thread.y][1],
+                flattened_solutions[this.thread.z][this.thread.x][this.thread.y][2] - target_solution[this.thread.x][this.thread.y][2],
+            ];
         })
-        .setOutput([number_of_solutions + crossover_number, images_width, images_height, 4]);
+        .setOutput([3, number_of_solutions + crossover_number, images_width, images_height]);
         
         this.sumAllPixelsKernel = gpu.createKernel(function(differenceImage) {
             let sum = 0;
             for (let x = 0; x < this.constants.width; x++) {
                 for (let y = 0; y < this.constants.height; y++) {
-                    sum += differenceImage[x][y][0];
-                    sum += differenceImage[x][y][1];
-                    sum += differenceImage[x][y][2];
+                    sum += differenceImage[0][x][y];
+                    sum += differenceImage[1][x][y];
+                    sum += differenceImage[2][x][y];
                 }
             }
             return sum;
@@ -259,7 +263,7 @@ class ImagePopulation {
         const flattened_solutions = this.solutions.map(solution => solution.pixels);
         
         const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
-        
+
         for(let i=0; i<this.solutions.length; i++) {
             this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i]);
         }
