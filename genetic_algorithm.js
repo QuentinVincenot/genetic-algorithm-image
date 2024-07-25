@@ -260,7 +260,7 @@ class ImagePopulation {
         const pixels_differences = this.diffPixelsKernel(flattened_solutions, target_solution.pixels);
 
         for(let i=0; i<this.solutions.length; i++) {
-            this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i]);
+            this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i])[0];
         }
 
         console.log('After eval', this.solutions_fitness);
