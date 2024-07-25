@@ -144,9 +144,9 @@ class ImagePopulation {
 
 
 
-        this.parallelSum = gpu.createKernel(function(differenceImages) {
-            let all_sums = new Array(number_of_solutions + crossover_number).fill(0);
-            all_sums[this.thread.x] += differenceImages[0][this.thread.x][this.thread.y][this.thread.z];
+        this.parallelSum = gpu.createKernel(function(differenceImages, solutions_fitness) {
+            let all_sums = solutions_fitness;
+            all_sums[this.thread.x] = differenceImages[0][this.thread.x][this.thread.y][this.thread.z];
             all_sums[this.thread.x] += differenceImages[1][this.thread.x][this.thread.y][this.thread.z];
             all_sums[this.thread.x] += differenceImages[2][this.thread.x][this.thread.y][this.thread.z];
             return all_sums;
@@ -274,7 +274,7 @@ class ImagePopulation {
             this.solutions_fitness[i] = this.sumAllPixelsKernel(pixels_differences[i])[0];
         }*/
         
-        this.solutions_fitness = this.parallelSum(pixels_differences);
+        this.solutions_fitness = this.parallelSum(pixels_differences, this.solutions_fitness);
         console.log('After eval', this.solutions_fitness);
 
 
