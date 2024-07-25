@@ -159,12 +159,11 @@ class ImagePopulation {
 
 
         this.allInOneKernel = gpu.createKernel(function(matrices, reference) {
-            const differences = matrices[this.thread.w][this.thread.x][this.thread.y][this.thread.z] - reference[this.thread.x][this.thread.y][this.thread.z];
             let sum = 0;
             for (let x = 0; x < 3; x++) {
                 for (let y = 0; y < 3; y++) {
                     for (let z = 0; z < 3; z++) {
-                        sum += differences[this.thread.x][x][y][z];
+                        sum += Math.abs(matrices[this.thread.w][x][y][z] - reference[x][y][z]);
                     }
                 }
             }
