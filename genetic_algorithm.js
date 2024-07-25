@@ -150,7 +150,7 @@ class ImagePopulation {
         }
         
         // Initialize the array of solutions fitness with highest numbers, that should be updated later on
-        this.solutions_fitness = new Array(this.number_of_solutions).fill(Infinity);
+        this.solutions_fitness = new Array(this.number_of_solutions).fill(Math.pow(10, 12));
     }
 
     crossover_population() {
@@ -185,7 +185,7 @@ class ImagePopulation {
 
             // Save the new solution generated and add it to the population list of solutions
             this.solutions.push(new_solution);
-            this.solutions_fitness.push(Infinity);
+            this.solutions_fitness.push(Math.pow(10, 12));
         }
     }
 
@@ -210,6 +210,10 @@ class ImagePopulation {
     }
 
     evaluate_solutions_fitness(target_solution) {
+
+        if(this.solutions_fitness[0] === Math.pow(10, 12)) {
+            return;
+        }
         
         
         /*// Convertir les solutions en format compatible pour GPU
