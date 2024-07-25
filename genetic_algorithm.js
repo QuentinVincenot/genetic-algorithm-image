@@ -362,7 +362,7 @@ class ImagePopulation {
         ];
 
         // Execute the combined kernel
-        const fitnesses_results = this.sumDifferencesKernel(flattenInnermostLevel(matrices), flattenInnermostLevel(reference));
+        const fitnesses_results = this.allInOneSumKernel(flattenInnermostLevel(matrices), flattenInnermostLevel(reference));
 
         console.log(fitnesses_results);
 
