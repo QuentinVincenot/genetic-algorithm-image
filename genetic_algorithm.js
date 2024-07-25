@@ -170,7 +170,7 @@ class ImagePopulation {
             }
             return sum;
         })
-        .setOutput([3]);
+        .setOutput([5]);
 
 
 
