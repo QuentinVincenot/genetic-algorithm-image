@@ -161,15 +161,17 @@ class ImagePopulation {
         // Define a combined kernel to calculate the absolute differences and sum them
         this.allInOneSumKernel = gpu.createKernel(function(matrices, reference) {
             let sum = 0;
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    const diff = Math.abs(matrices[this.thread.x][i][j] - reference[i][j]);
-                    sum += diff;
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < 2; j++) {
+                    for (let k = 0; k < 4; k++) {
+                        const diff = Math.abs(matrices[this.thread.x][i][j][k] - reference[i][j][k]);
+                        sum += diff;
+                    }
                 }
             }
             return sum;
         })
-        .setOutput([3]);
+        .setOutput([5]);
 
 
 
@@ -283,26 +285,31 @@ class ImagePopulation {
 
         const matrices = [
             [
-                [1, 1, 1],
-                [1, 2, 1],
-                [1, 1, 1]
+                [[1, 1, 1, 255], [1, 1, 1, 255]],
+                [[1, 1, 1, 255], [1, 1, 1, 255]]
             ],
             [
-                [3, 3, 3],
-                [3, 4, 3],
-                [3, 3, 3]
+                [[2, 2, 2, 255], [2, 2, 2, 255]],
+                [[2, 2, 2, 255], [2, 2, 2, 255]]
             ],
             [
-                [6, 6, 6],
-                [6, 7, 6],
-                [6, 6, 6]
+                [[3, 3, 3, 255], [3, 3, 3, 255]],
+                [[3, 3, 3, 255], [3, 3, 3, 255]]
             ],
+            [
+                [[3, 3, 3, 255], [3, 3, 4, 255]],
+                [[3, 3, 3, 255], [3, 3, 3, 255]]
+            ],
+            [
+                [[3, 3, 3, 255], [3, 3, 3, 255]],
+                [[3, 3, 3, 255], [7, 3, 3, 255]]
+            ]
         ];
         
+        // Reference matrix
         const reference = [
-            [5, 5, 5],
-            [5, 5, 5],
-            [5, 5, 5]
+            [[2, 2, 2, 255], [2, 2, 2, 255]], // First row of the reference matrix
+            [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
         ];
 
         // Execute the combined kernel
