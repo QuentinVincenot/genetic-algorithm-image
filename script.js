@@ -73,12 +73,9 @@ start_button.addEventListener('click', () => {
             ALGO_CROSSOVER_NUMBER, ALGO_MUTATION_FACTOR);
     }
     
-    // Evaluate the fitness of every randomly generated initial solutions of the algorithm
-    ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
-    // Retrieve the solution with the best fitness among all currently available solutions
-    let best_fitness_element = ALGO_POPULATION.best_fitness();
-    ALGO_BEST_SOLUTION = best_fitness_element['best_solution'];
-    ALGO_BEST_FITNESS = best_fitness_element['best_fitness'];
+    // Retrieve the first solution as the starting best fitness among all currently available solutions
+    ALGO_BEST_SOLUTION = ALGO_POPULATION.solutions[0];
+    ALGO_BEST_FITNESS = ALGO_POPULATION.solutions_fitness[0];
 
     // Draw the best solution image in the best found solution image canvas
     draw_solution_image_in_canvas(solution_image_context, ALGO_BEST_SOLUTION);
