@@ -119,20 +119,29 @@ function updateCanvas() {
         
         
         // Randomly make the population solutions crossover to create new solutions
+        console.time('crossover_population');
         ALGO_POPULATION.crossover_population();
+        console.timeEnd('crossover_population');
         
         // Randomly mutate the population based on a mutation factor proper to the population
+        console.time('mutate_population');
         ALGO_POPULATION.mutate_population();
+        console.timeEnd('mutate_population');
         
         // Evaluate the fitness of every randomly generated initial solutions of the algorithm
+        console.time('evaluate_solutions_fitness');
         ALGO_POPULATION.evaluate_solutions_fitness(ALGO_TARGET_SOLUTION);
+        console.timeEnd('evaluate_solutions_fitness');
         
         // Select the population to keep only the fittess solutions found
+        console.time('select_population');
         ALGO_POPULATION.select_population();
+        console.timeEnd('select_population');
 
         
 
         // Retrieve the solution of the current population, and update the canvas if a fitter solution has been found
+        console.time('best_fitness');
         let best_fitness_element = ALGO_POPULATION.best_fitness();
         if(best_fitness_element['best_fitness'] < ALGO_BEST_FITNESS) {
             // Retrieve the solution image and its corresponding fitness
@@ -145,8 +154,9 @@ function updateCanvas() {
             // Update the best solution fitness legend in the canvas
             document.getElementById('best_solution_legend').innerText = "Best solution image : fitness = " + Math.floor(ALGO_BEST_FITNESS).toString();
         }
+        console.timeEnd('best_fitness');
 
-        
+
 
         if(ALGO_ITERATIONS < MAX_ITERATIONS) {
             // Launch the next iteration of the algorithm
