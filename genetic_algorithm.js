@@ -163,10 +163,8 @@ class ImagePopulation {
             let sum = 0;
             for (let i = 0; i < 2; i++) {
                 for (let j = 0; j < 2; j++) {
-                    for (let k = 0; k < 4; k++) {
-                        const diff = Math.abs(matrices[this.thread.x][i][j][k] - reference[i][j][k]);
-                        sum += diff;
-                    }
+                    const diff = Math.abs(matrices[this.thread.x][i][j] - reference[i][j]);
+                    sum += diff;
                 }
             }
             return sum;
@@ -300,9 +298,23 @@ class ImagePopulation {
         console.log(differences);*/
 
 
-        function flattenMatrix(matrix) {
-            // Convertit la matrice en un tableau unidimensionnel en utilisant JSON.stringify et Array.prototype.flat
-            return matrix.flat(Infinity);
+        function flattenInnermostLevel(matrix) {
+            // Vérifie si le tableau contient des tableaux
+            if (Array.isArray(matrix[0])) {
+                // Aplatir le niveau le plus intérieur
+                return matrix.map(subArray => {
+                    if (Array.isArray(subArray[0])) {
+                        // Appel récursif pour traiter les sous-tableaux multidimensionnels
+                        return flattenInnermostLevel(subArray);
+                    } else {
+                        // Aplatir le niveau le plus intérieur
+                        return subArray.flat();
+                    }
+                });
+            } else {
+                // Cas où la matrice est déjà un tableau unidimensionnel
+                return matrix;
+            }
         }
 
         function unflattenMatrix(flatArray, dimensions) {
@@ -350,7 +362,7 @@ class ImagePopulation {
         ];
 
         // Execute the combined kernel
-        const fitnesses_results = this.sumDifferencesKernel(flattenMatrix(matrices), flattenMatrix(reference));
+        const fitnesses_results = this.sumDifferencesKernel(flattenInnermostLevel(matrices), flattenInnermostLevel(reference));
 
         console.log(fitnesses_results);
 
