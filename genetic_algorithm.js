@@ -3,17 +3,6 @@ import { /*calculateAndSumDifferences, evaluateFitnessForPopulation,*/ differenc
 
 const gpu = new GPU();
 
-/*const diffMatricesKernel = gpu.createKernel(function(matrix1, matrix2) {
-    // Calculate the fitness of each solution by comparing with the target solution
-    return matrix1[this.thread.x][this.thread.y] - matrix2[this.thread.x][this.thread.y];
-})
-.setOutput([3, 3]);*/
-
-/*const diffMatricesReferenceKernel = gpu.createKernel(function(matrices, reference) {
-    // Calculate the fitness of each solution by comparing with the target solution
-    return matrices[this.thread.z][this.thread.x][this.thread.y] - reference[this.thread.x][this.thread.y];
-})
-.setOutput([5, 3, 3]);*/
 
 function flatten_matrices(matrices) {
     const numMatrices = 5;
@@ -344,66 +333,8 @@ class ImagePopulation {
 
         this.TEST_GPU_JS();
 
-        /*// Convertir les solutions en format compatible pour GPU
-        const target_pixels = target_solution.pixels;
+        
 
-        // Évaluer la fitness de chaque solution
-        const solutions_fitness = evaluateFitnessForPopulation(this.solutions, target_pixels, this.solutions.length);
-        
-        // Assigner les résultats aux solutions_fitness
-        for (let i = 0; i < this.solutions.length; i++) {
-            this.solutions_fitness[i] = solutions_fitness[i];
-        }*/
-        
-        
-        
-        /*const matrix1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        const matrix2 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-        const differences = diffMatricesKernel(matrix1, matrix2);
-        console.log(differences);*/
-
-        /*const matrices = [
-            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
-            [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
-        ];
-        const reference = [[7, 7, 7], [7, 7, 7], [7, 7, 7]];
-        const differences = diffMatricesReferenceKernel(matrices, reference);
-        console.log(differences);*/
-
-
-        
-        
-        /*const matrices = [
-            [
-                [[1, 1, 1, 255], [1, 1, 1, 255]],
-                [[1, 1, 1, 255], [1, 1, 1, 255]]
-            ],
-            [
-                [[2, 2, 2, 255], [2, 2, 2, 255]],
-                [[2, 2, 2, 255], [2, 2, 2, 255]]
-            ],
-            [
-                [[3, 3, 3, 255], [3, 3, 3, 255]],
-                [[3, 3, 3, 255], [3, 3, 3, 255]]
-            ],
-            [
-                [[3, 3, 3, 255], [3, 3, 4, 255]],
-                [[3, 3, 3, 255], [3, 3, 3, 255]]
-            ],
-            [
-                [[3, 3, 3, 255], [3, 3, 3, 255]],
-                [[3, 3, 3, 255], [7, 3, 3, 255]]
-            ]
-        ];
-        
-        // Reference matrix
-        const reference = [
-            [[2, 2, 2, 255], [2, 2, 2, 255]], // First row of the reference matrix
-            [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
-        ];*/
 
 
         console.time('fitness_computation');
@@ -530,16 +461,60 @@ class ImagePopulation {
 
 
     TEST_GPU_JS() {
+        /*----------------------------------------------------------
+        *--- differenceKernel_1D_arrays
+        *-----------------------------------------------------------*/
         // Kernel : difference between two 1D arrays
         const differenceKernel_1D_arrays = gpu.createKernel(function(array1, array2) {
             return Math.abs(array1[this.thread.x] - array2[this.thread.x]);
         })
         .setOutput([10]);
-        // Test data for difference kernel
+        // Test data for differenceKernel_1D_arrays
         const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         const array2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-        const differences = differenceKernel_1D_arrays(array1, array2);
-        console.log('differenceKernel_1D_arrays :', differences);
+        console.time('differenceKernel_1D_arrays');
+        const differences_a = differenceKernel_1D_arrays(array1, array2);
+        console.timeEnd('differenceKernel_1D_arrays');
+        console.log('differenceKernel_1D_arrays :', differences_a);
+
+        /*----------------------------------------------------------
+        *--- diffrenceKernel_2D_matrices
+        *-----------------------------------------------------------*/
+        // Kernel : difference between two 2D matrices
+        const diffrenceKernel_2D_matrices = gpu.createKernel(function(matrix1, matrix2) {
+            return Math.abs(matrix1[this.thread.x][this.thread.y] - matrix2[this.thread.x][this.thread.y]);
+        })
+        .setOutput([3, 3]);
+        // Test data for diffrenceKernel_2D_matrices
+        const matrix1 = [[7, 7, 7], [6, 6, 6], [5, 5, 5]];
+        const matrix2 = [[2, 2, 2], [4, 4, 4], [6, 6, 6]];
+        console.time('diffrenceKernel_2D_matrices');
+        const differences_m = diffrenceKernel_2D_matrices(matrix1, matrix2);
+        console.timeEnd('diffrenceKernel_2D_matrices');
+        console.log('diffrenceKernel_2D_matrices :', differences_m);
+
+        /*----------------------------------------------------------
+        *--- differenceKernel_2D_matrices_reference
+        *-----------------------------------------------------------*/
+        // Kernel : difference between two 2D matrices and a reference matrix
+        const differenceKernel_2D_matrices_reference = gpu.createKernel(function(matrices, reference) {
+            // Calculate the fitness of each solution by comparing with the target solution
+            return Math.abs(matrices[this.thread.z][this.thread.x][this.thread.y] - reference[this.thread.x][this.thread.y]);
+        })
+        .setOutput([5, 3, 3]);
+        // Test data for differenceKernel_2D_matrices_reference
+        const matrices = [
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]],
+            [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        ];
+        const reference = [[7, 7, 7], [7, 7, 7], [7, 7, 7]];
+        console.time('differenceKernel_2D_matrices_reference');
+        const differences_r = differenceKernel_2D_matrices_reference(matrices, reference);
+        console.timeEnd('differenceKernel_2D_matrices_reference');
+        console.log('differenceKernel_2D_matrices_reference :', differences_r);
     }
 
 
