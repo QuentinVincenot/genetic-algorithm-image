@@ -423,7 +423,8 @@ class ImagePopulation {
             fitnesses.push(fitness);
             this.solutions_fitness[i] = fitness;
         }
-        console.log(this.solutions_fitness);
+        console.log('raw fitnesses :', fitnesses);
+        console.log('raw solutions fitnesses :', this.solutions_fitness);
         console.timeEnd('fitness_computation');
 
 
@@ -450,16 +451,16 @@ class ImagePopulation {
 
             const flattened_batch = flatten_matrices(batched_solutions);
             const flattened_target = flatten_solution(target_solution.pixels);
-            console.log('flattened_batch', flattened_batch);
-            console.log('flattened_target', flattened_target);
+            //console.log('flattened_batch', flattened_batch);
+            //console.log('flattened_target', flattened_target);
 
             const pixels_differences = this.batched_diffKernel(flattened_batch, flattened_target);
-            console.log('pixels_differences', pixels_differences);
+            //console.log('pixels_differences', pixels_differences);
 
             const batch_fitnesses = this.batched_sumKernel(pixels_differences);
-            console.log('batch_fitnesses', batch_fitnesses);
+            //console.log('batch_fitnesses', batch_fitnesses);
 
-            console.log(batch_fitnesses);
+            //console.log(batch_fitnesses);
             for(let fi=0; fi<batch_fitnesses.length; fi++) {
                 fitnesses.push(batch_fitnesses[fi]);
             }
@@ -469,7 +470,8 @@ class ImagePopulation {
         for (let i = 0; i < this.solutions.length; i++) {
             this.solutions_fitness[i] = fitnesses[i];
         }
-        console.log(this.solutions_fitness);
+        console.log('batched fitnesses :', fitnesses);
+        console.log('batched solutions fitnesses :', this.solutions_fitness);
         console.timeEnd('batched_fitness_computation');
 
 
