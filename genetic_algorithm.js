@@ -181,7 +181,7 @@ class ImagePopulation {
             const k = this.thread.z;  // Index pour les canaux (couleurs)
             return Math.abs(matrices[i][j][k] - reference[i][j][k]);
         })
-        .setOutput([300, 200, 4]);  // Dimensions basées sur les pixels et les canaux
+        .setOutput([200, 300, 4]);  // Dimensions basées sur les pixels et les canaux
 
         // Crée un kernel pour sommer les différences
         this.sumKernel = gpu.createKernel(function(differences) {
