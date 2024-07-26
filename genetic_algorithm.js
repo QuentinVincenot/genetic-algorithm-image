@@ -526,20 +526,20 @@ class ImagePopulation {
             // Calculate the fitness of each solution by comparing with the target solution
             let sum = 0;
             for(let k=0; k<4; k++) {
-                sum += Math.abs(matrices[this.thread.w][this.thread.z][this.thread.y][k] - reference[this.thread.z][this.thread.y][k]);    
+                sum += Math.abs(matrices[this.thread.w][this.thread.y][this.thread.x][k] - reference[this.thread.y][this.thread.x][k]);    
             }
             return sum;
         })
         .setOutput([2, 2, 5]);
         // Test data for differenceKernel_3D_matrices_reference
         const solutions = [
-            [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
-            [[[120, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
-            [[[140, 137, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
-            [[[140, 127, 60, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
-            [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]]
+            [[[10, 150, 5, 255], [10, 150, 5, 255]], [[10, 20, 30, 255], [5, 50, 200, 255]]],
+            [[[14, 150, 5, 255], [10, 150, 5, 255]], [[10, 20, 38, 255], [5, 50, 200, 255]]],
+            [[[10, 159, 5, 255], [10, 150, 5, 255]], [[10, 20, 30, 255], [5, 50, 200, 255]]],
+            [[[10, 150, 12, 255], [10, 150, 5, 255]], [[10, 20, 30, 255], [5, 50, 195, 255]]],
+            [[[10, 150, 5, 255], [10, 150, 5, 255]], [[10, 20, 38, 255], [5, 53, 200, 255]]]
         ];
-        const target = [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]];
+        const target = [[[10, 150, 5, 255], [10, 150, 5, 255]], [[10, 20, 30, 255], [5, 50, 200, 255]]];
         console.time('differenceKernel_3D_matrices_reference');
         const differences_r2 = differenceKernel_3D_matrices_reference(solutions, target);
         console.timeEnd('differenceKernel_3D_matrices_reference');
