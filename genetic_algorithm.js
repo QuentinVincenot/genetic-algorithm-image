@@ -454,10 +454,15 @@ class ImagePopulation {
 
             const flattened_batch = flatten_matrices(batched_solutions);
             const flattened_target = flatten_solution(target_solution.pixels);
+            console.log('flattened_batch', flattened_batch);
+            console.log('flattened_target', flattened_target);
 
             const pixels_differences = this.batched_diffKernel(flattened_batch, flattened_target);
+            console.log('pixels_differences', pixels_differences);
 
             const batch_fitnesses = this.batched_sumKernel(pixels_differences);
+            console.log('batch_fitnesses', batch_fitnesses);
+            
             console.log(batch_fitnesses);
             for(let fi=0; fi<batch_fitnesses.length; fi++) {
                 fitnesses.push(batch_fitnesses[fi]);
