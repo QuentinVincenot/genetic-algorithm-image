@@ -21,6 +21,60 @@ const gpu = new GPU();
 })
 .setOutput([5, 3, 3]);*/
 
+function flatten_matrices(matrices) {
+    // Obtenez les dimensions
+    const numMatrices = matrices.length;       // 2 matrices
+    const numRows = matrices[0].length;        // 2 lignes
+    const numCols = matrices[0][0].length;     // 2 colonnes
+    const numChannels = matrices[0][0][0].length; // 4 canaux
+
+    // Créez une nouvelle matrice de sortie
+    const transformed = Array.from({ length: numRows }, () =>
+        Array.from({ length: numCols }, () =>
+            Array(numChannels * numMatrices).fill(0) // Créer un tableau de taille 8 pour chaque cellule
+        )
+    );
+
+    // Remplir la nouvelle matrice
+    for (let m = 0; m < numMatrices; m++) {
+        for (let i = 0; i < numRows; i++) {
+            for (let j = 0; j < numCols; j++) {
+                for (let k = 0; k < numChannels; k++) {
+                    // Concaténer les canaux des matrices dans la nouvelle matrice
+                    transformed[i][j][m * numChannels + k] = matrices[m][i][j][k];
+                }
+            }
+        }
+    }
+
+    return transformed;
+}
+
+function flatten_solution(matrix) {
+    // Obtenez les dimensions
+    const numRows = matrix.length;        // 2 lignes
+    const numCols = matrix[0].length;     // 2 colonnes
+    const numChannels = matrix[0][0].length; // 4 canaux
+
+    // Créez une nouvelle matrice de sortie avec des dimensions 2x8
+    const flattened = Array.from({ length: numRows }, () =>
+        Array(numCols * numChannels).fill(0)
+    );
+
+    // Remplir la nouvelle matrice
+    for (let i = 0; i < numRows; i++) {
+        for (let j = 0; j < numCols; j++) {
+            for (let k = 0; k < numChannels; k++) {
+                // Concaténer les canaux dans la nouvelle structure aplatie
+                flattened[i][j * numChannels + k] = matrix[i][j][k];
+            }
+        }
+    }
+
+    return flattened;
+}
+
+
 
 
 
@@ -203,21 +257,18 @@ class ImagePopulation {
         this.batched_diffKernel = gpu.createKernel(function(matrices, reference) {
             const w = this.thread.w;  // Index pour les matrices
             const i = this.thread.y;  // Index pour les lignes
-            const j = this.thread.x;  // Index pour les colonnes
-            const k = this.thread.z;  // Index pour les canaux (couleurs)
-            return Math.abs(matrices[w][i][j][k] - reference[i][j][k]);
+            const j = this.thread.x;  // Index pour les colonnes+canaux
+            return Math.abs(matrices[w][i][j] - reference[i][j]);
         })
-        .setOutput([5, 200, 300, 4]);  // Dimensions basées sur les pixels et les canaux
+        .setOutput([5, 200, 1200]);  // Dimensions basées sur les pixels et les canaux
 
         // Crée un kernel pour sommer les différences
         this.batched_sumKernel = gpu.createKernel(function(differences) {
             const w = this.thread.x;  // Index pour les matrices
             let sum = 0;
             for (let i = 0; i < 200; i++) {
-                for (let j = 0; j < 300; j++) {
-                    for (let k = 0; k < 4; k++) {
-                        sum += differences[w][i][j][k];
-                    }
+                for (let j = 0; j < 1200; j++) {
+                    sum += differences[w][i][j];
                 }
             }
             return sum;
@@ -390,7 +441,11 @@ class ImagePopulation {
                 this.solutions[j].pixels, this.solutions[j+1].pixels, this.solutions[j+2].pixels,
                 this.solutions[j+3].pixels, this.solutions[j+4].pixels
             ];
-            const pixels_differences = this.batched_diffKernel(batched_solutions, target_solution.pixels);
+
+            const flattened_batch = flatten_matrices(batched_solutions);
+            const flattened_target = flatten_solution(target_solution.pixels)
+
+            const pixels_differences = this.batched_diffKernel(flattened_batch, flattened_target);
             console.timeEnd('batched_diffKernel');
 
             console.time('batched_sumKernel');
