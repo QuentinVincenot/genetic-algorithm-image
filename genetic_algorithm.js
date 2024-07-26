@@ -37,7 +37,7 @@ function flatten_matrices(matrices) {
         for (let i = 0; i < numRows; i++) {
             for (let j = 0; j < numCols; j++) {
                 for (let k = 0; k < numChannels; k++) {
-                    transformed[m][i][j * numCols + k] = matrices[m][i][j][k];
+                    transformed[m][i][j * numChannels + k] = matrices[m][i][j][k];
                 }
             }
         }
@@ -62,7 +62,7 @@ function flatten_solution(matrix) {
         for (let j = 0; j < numCols; j++) {
             for (let k = 0; k < numChannels; k++) {
                 // Concaténer les canaux dans la nouvelle structure aplatie
-                flattened[i][j * numCols + k] = matrix[i][j][k];
+                flattened[i][j * numChannels + k] = matrix[i][j][k];
             }
         }
     }
