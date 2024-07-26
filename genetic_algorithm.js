@@ -199,6 +199,33 @@ class ImagePopulation {
 
 
 
+        // Crée un kernel pour calculer la différence absolue de chaque pixel
+        this.batched_diffKernel = gpu.createKernel(function(matrices, reference) {
+            const w = this.thread.w;  // Index pour les matrices
+            const i = this.thread.y;  // Index pour les lignes
+            const j = this.thread.x;  // Index pour les colonnes
+            const k = this.thread.z;  // Index pour les canaux (couleurs)
+            return Math.abs(matrices[w][i][j][k] - reference[i][j][k]);
+        })
+        .setOutput([5, 200, 300, 4]);  // Dimensions basées sur les pixels et les canaux
+
+        // Crée un kernel pour sommer les différences
+        this.batched_sumKernel = gpu.createKernel(function(differences) {
+            const w = this.thread.w;  // Index pour les matrices
+            let sum = 0;
+            for (let i = 0; i < 200; i++) {
+                for (let j = 0; j < 300; j++) {
+                    for (let k = 0; k < 4; k++) {
+                        sum += differences[w][i][j][k];
+                    }
+                }
+            }
+            return sum;
+        })
+        .setOutput([5]);
+
+
+
     }
 
     initialize_population() {
@@ -338,7 +365,6 @@ class ImagePopulation {
             [[2, 2, 2, 255], [2, 2, 2, 255]] // Second row of the reference matrix
         ];*/
 
-        console.log(target_solution.pixels);
 
         let fitnesses = [];
         for (let i = 0; i < this.solutions.length; i++) {
@@ -352,6 +378,29 @@ class ImagePopulation {
 
             fitnesses.push(fitness);
             this.solutions_fitness[i] = fitness;
+        }
+        console.log(fitnesses);
+
+
+        fitnesses = [];
+        let j=0;
+        while(j < this.solutions.length) {
+            console.time('batched_diffKernel');
+            let batched_solutions = [
+                this.solutions[j].pixels, this.solutions[j+1].pixels, this.solutions[j+2].pixels,
+                this.solutions[j+3].pixels, this.solutions[j+4].pixels
+            ];
+            const pixels_differences = this.batched_diffKernel(batched_solutions, target_solution.pixels);
+            console.timeEnd('batched_diffKernel');
+
+            console.time('batched_sumKernel');
+            const batch_fitnesses = this.batched_sumKernel(pixels_differences);
+            for(let fi=0; fi<batch_fitnesses.length; fi++) {
+                fitnesses.push(batch_fitnesses[j]);
+            }
+            console.timeEnd('batched_sumKernel');
+
+            j = Math.min(j+5, this.solutions.length);
         }
         console.log(fitnesses);
 

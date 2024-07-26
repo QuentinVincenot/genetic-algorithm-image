@@ -114,7 +114,7 @@ reset_button.addEventListener('click', () => {
 function updateCanvas() {
     setTimeout(() => {
         // Increase the number of iterations of the genetic algorithm as a counter
-        ALGO_ITERATIONS++; console.log('Updating iteration', ALGO_ITERATIONS);
+        ALGO_ITERATIONS++; console.log('Updating iteration', ALGO_ITERATIONS, '; Best fitness =', ALGO_BEST_FITNESS);
 
         
         
