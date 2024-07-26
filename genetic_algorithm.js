@@ -264,7 +264,7 @@ class ImagePopulation {
 
         // Crée un kernel pour sommer les différences
         this.batched_sumKernel = gpu.createKernel(function(differences) {
-            const w = this.thread.x;  // Index pour les matrices
+            const w = this.thread.z;  // Index pour les matrices
             let sum = 0;
             for (let i = 0; i < 200; i++) {
                 for (let j = 0; j < 1200; j++) {
@@ -417,36 +417,33 @@ class ImagePopulation {
         ];*/
 
 
+        console.time('fitness_computation');
         let fitnesses = [];
         for (let i = 0; i < this.solutions.length; i++) {
-            console.time('diffKernel');
-            const pixels_differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
-            console.timeEnd('diffKernel');
 
-            console.time('sumKernel');
+            const pixels_differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
             const fitness = this.sumKernel(pixels_differences)[0];
-            console.timeEnd('sumKernel');
 
             fitnesses.push(fitness);
             this.solutions_fitness[i] = fitness;
         }
         console.log(fitnesses);
+        console.timeEnd('fitness_computation');
 
 
+
+        console.time('batched_fitness_computation');
         fitnesses = [];
         let j=0;
         while(j < this.solutions.length) {
-            console.time('batched_diffKernel');
 
             let batched_solutions = [];
 
             let start_batch = j;
             let end_batch = Math.min(j+5, this.solutions.length);
-            //console.log(start_batch, end_batch, this.solutions.length);
 
             let element_index = start_batch;
             while(element_index < end_batch) {
-                //console.log(element_index);
                 batched_solutions.push(this.solutions[element_index].pixels);
                 element_index++;
             }
@@ -454,34 +451,25 @@ class ImagePopulation {
                 batched_solutions.push(this.solutions[element_index-1].pixels);
             }
 
-            
-            /*let end_batch = j;
-            while(end_batch < this.solutions.length) {
-                batched_solutions.push(this.solutions[end_batch].pixels);
-                end_batch++;
-            }
-
-            let batched_solutions = [
-                this.solutions[j].pixels, this.solutions[j+1].pixels, this.solutions[j+2].pixels,
-                this.solutions[j+3].pixels, this.solutions[j+4].pixels
-            ];*/
 
             const flattened_batch = flatten_matrices(batched_solutions);
-            const flattened_target = flatten_solution(target_solution.pixels)
+            const flattened_target = flatten_solution(target_solution.pixels);
 
             const pixels_differences = this.batched_diffKernel(flattened_batch, flattened_target);
-            console.timeEnd('batched_diffKernel');
 
-            console.time('batched_sumKernel');
             const batch_fitnesses = this.batched_sumKernel(pixels_differences);
+            console.log(batch_fitnesses);
             for(let fi=0; fi<batch_fitnesses.length; fi++) {
                 fitnesses.push(batch_fitnesses[fi]);
             }
-            console.timeEnd('batched_sumKernel');
 
             j = end_batch;
         }
+        for (let i = 0; i < this.solutions.length; i++) {
+            this.solutions_fitness[i] = fitnesses[i];
+        }
         console.log(fitnesses);
+        console.timeEnd('batched_fitness_computation');
 
 
 
