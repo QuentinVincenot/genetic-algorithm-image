@@ -342,11 +342,11 @@ class ImagePopulation {
 
         let fitnesses = [];
         for (let i = 0; i < this.solutions.length; i++) {
-            console.timeEnd('diffKernel');
+            console.time('diffKernel');
             const pixels_differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
             console.timeEnd('diffKernel');
 
-            console.timeEnd('sumKernel');
+            console.time('sumKernel');
             const fitness = this.sumKernel(pixels_differences)[0];
             console.timeEnd('sumKernel');
 
