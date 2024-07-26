@@ -29,9 +29,9 @@ function flatten_matrices(matrices) {
     const numChannels = matrices[0][0][0].length; // 4 canaux
 
     // Créez une nouvelle matrice de sortie
-    const transformed = Array.from({ length: numRows }, () =>
-        Array.from({ length: numCols }, () =>
-            Array(numChannels * numMatrices).fill(0) // Créer un tableau de taille 8 pour chaque cellule
+    const transformed = Array.from({ length: numMatrices }, () =>
+        Array.from({ length: numRows }, () =>
+            Array(numCols * numChannels).fill(0) // Créer un tableau de taille 8 pour chaque cellule
         )
     );
 
@@ -41,7 +41,7 @@ function flatten_matrices(matrices) {
             for (let j = 0; j < numCols; j++) {
                 for (let k = 0; k < numChannels; k++) {
                     // Concaténer les canaux des matrices dans la nouvelle matrice
-                    transformed[i][j][m * numChannels + k] = matrices[m][i][j][k];
+                    transformed[m][i][j * numCols + k] = matrices[m][i][j][k];
                 }
             }
         }
@@ -66,7 +66,7 @@ function flatten_solution(matrix) {
         for (let j = 0; j < numCols; j++) {
             for (let k = 0; k < numChannels; k++) {
                 // Concaténer les canaux dans la nouvelle structure aplatie
-                flattened[i][j * numChannels + k] = matrix[i][j][k];
+                flattened[i][j * numCols + k] = matrix[i][j][k];
             }
         }
     }
@@ -264,7 +264,7 @@ class ImagePopulation {
 
         // Crée un kernel pour sommer les différences
         this.batched_sumKernel = gpu.createKernel(function(differences) {
-            const w = this.thread.z;  // Index pour les matrices
+            const w = this.thread.x;  // Index pour les matrices
             let sum = 0;
             for (let i = 0; i < 200; i++) {
                 for (let j = 0; j < 1200; j++) {
@@ -427,7 +427,7 @@ class ImagePopulation {
             fitnesses.push(fitness);
             this.solutions_fitness[i] = fitness;
         }
-        console.log(fitnesses);
+        console.log(this.solutions_fitness);
         console.timeEnd('fitness_computation');
 
 
@@ -468,7 +468,7 @@ class ImagePopulation {
         for (let i = 0; i < this.solutions.length; i++) {
             this.solutions_fitness[i] = fitnesses[i];
         }
-        console.log(fitnesses);
+        console.log(this.solutions_fitness);
         console.timeEnd('batched_fitness_computation');
 
 
