@@ -342,7 +342,7 @@ class ImagePopulation {
 
         this.TEST(target_solution);
 
-        TEST_GPU_JS();
+        this.TEST_GPU_JS();
 
         /*// Convertir les solutions en format compatible pour GPU
         const target_pixels = target_solution.pixels;
