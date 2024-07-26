@@ -346,6 +346,8 @@ class ImagePopulation {
 
     evaluate_solutions_fitness(target_solution) {
 
+        this.TEST(target_solution);
+
         /*// Convertir les solutions en format compatible pour GPU
         const target_pixels = target_solution.pixels;
 
@@ -517,6 +519,26 @@ class ImagePopulation {
         // Return the solution, and its fitness score, that corresponds to the best fitting image
         return {'best_solution': best_solution, 'best_fitness': best_fitness};
     }
+
+
+
+    TEST(target_solution) {
+        let total_differences = 0;
+
+        for(let i=0; i<200; i++) {
+            for(let j=0; j<300; j++) {
+                for( letk=0; k<4; k++) {
+                    let diff = Math.abs(this.solutions[0].pixels[i][j][k] - target_solution.pixels[i][j][k]);
+                    total_differences += diff;
+                }
+            }
+        }
+
+        console.log('*** TEST *** :', total_differences);
+    }
+
+
+
 }
 
 export { ImageSolution, ImagePopulation };
