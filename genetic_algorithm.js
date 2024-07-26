@@ -255,7 +255,7 @@ class ImagePopulation {
 
         // Crée un kernel pour calculer la différence absolue de chaque pixel
         this.batched_diffKernel = gpu.createKernel(function(matrices, reference) {
-            const w = this.thread.w;  // Index pour les matrices
+            const w = this.thread.z;  // Index pour les matrices
             const i = this.thread.y;  // Index pour les lignes
             const j = this.thread.x;  // Index pour les colonnes+canaux
             return Math.abs(matrices[w][i][j] - reference[i][j]);
