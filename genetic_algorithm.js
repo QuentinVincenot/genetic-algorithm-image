@@ -531,23 +531,19 @@ class ImagePopulation {
         // Kernel : sums of all differences
         const sumKernel_differences = gpu.createKernel(function(differences) {
             let sum = 0;
-            for(let i=0; i<2; i++) {
-                for(let j=0; j<8; j++) {
-                    sum += differences[this.thread.z][i][j];
-                }
-            }
+            sum += differences[this.thread.z][this.thread.y][this.thread.x];
             return sum;
         })
         .setOutput([5]);
         // Test data for differenceKernel_3D_matrices_reference
         const solutions = [
-            [[10, 150, 5, 255, 10, 150, 5, 255], [10, 20, 30, 255, 5, 50, 200, 255]],
-            [[14, 150, 5, 255, 10, 150, 5, 255], [10, 20, 38, 255, 5, 50, 200, 255]],
-            [[10, 159, 5, 255, 10, 150, 5, 255], [10, 20, 30, 255, 5, 50, 200, 255]],
-            [[10, 150, 12, 255, 10, 150, 5, 255], [10, 20, 30, 255, 5, 50, 195, 255]],
-            [[10, 150, 5, 255, 10, 150, 5, 255], [10, 20, 38, 255, 5, 53, 200, 255]]
+            [[12, 12, 12, 255, 12, 12, 12, 255], [12, 12, 12, 255, 12, 12, 12, 255]],
+            [[14, 14, 14, 255, 14, 14, 14, 255], [14, 14, 14, 255, 14, 14, 14, 255]],
+            [[12, 12, 12, 255, 12, 12, 12, 255], [12, 12, 12, 255, 12, 12, 12, 255]],
+            [[17, 17, 17, 255, 17, 17, 17, 255], [17, 17, 17, 255, 17, 17, 17, 255]],
+            [[20, 20, 20, 255, 20, 20, 20, 255], [20, 20, 20, 255, 20, 20, 20, 255]]
         ];
-        const target = [[10, 150, 5, 255, 10, 150, 5, 255], [10, 20, 30, 255, 5, 50, 200, 255]];
+        const target = [[10, 10, 10, 255, 10, 10, 10, 255], [10, 10, 10, 255, 10, 10, 10, 255]];
         console.time('differenceKernel_3D_matrices_reference');
         const differences_r2 = differenceKernel_3D_matrices_reference(solutions, target);
         console.timeEnd('differenceKernel_3D_matrices_reference');
