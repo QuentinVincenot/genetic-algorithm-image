@@ -526,7 +526,7 @@ class ImagePopulation {
             // Calculate the fitness of each solution by comparing with the target solution
             let sum = 0;
             for(let k=0; k<4; k++) {
-                sum += Math.abs(matrices[this.thread.w][this.thread.y][this.thread.x][k] - reference[this.thread.y][this.thread.x][k]);    
+                sum += Math.abs(matrices[this.thread.z][this.thread.y][this.thread.x][k] - reference[this.thread.y][this.thread.x][k]);    
             }
             return sum;
         })
