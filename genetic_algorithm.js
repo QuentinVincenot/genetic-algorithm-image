@@ -451,7 +451,7 @@ class ImagePopulation {
             console.time('batched_sumKernel');
             const batch_fitnesses = this.batched_sumKernel(pixels_differences);
             for(let fi=0; fi<batch_fitnesses.length; fi++) {
-                fitnesses.push(batch_fitnesses[j]);
+                fitnesses.push(batch_fitnesses[fi]);
             }
             console.timeEnd('batched_sumKernel');
 
