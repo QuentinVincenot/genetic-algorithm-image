@@ -186,9 +186,9 @@ class ImagePopulation {
         // Crée un kernel pour sommer les différences
         this.sumKernel = gpu.createKernel(function(differences) {
             let sum = 0;
-            for (let i = 0; i < differences.length; i++) {
-                for (let j = 0; j < differences[0].length; j++) {
-                    for (let k = 0; k < differences[0][0].length; k++) {
+            for (let i = 0; i < 200; i++) {
+                for (let j = 0; j < 300; j++) {
+                    for (let k = 0; k < 4; k++) {
                         sum += differences[i][j][k];
                     }
                 }
