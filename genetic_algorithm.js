@@ -527,7 +527,7 @@ class ImagePopulation {
 
         for(let i=0; i<200; i++) {
             for(let j=0; j<300; j++) {
-                for( letk=0; k<4; k++) {
+                for(let k=0; k<4; k++) {
                     let diff = Math.abs(this.solutions[0].pixels[i][j][k] - target_solution.pixels[i][j][k]);
                     total_differences += diff;
                 }
