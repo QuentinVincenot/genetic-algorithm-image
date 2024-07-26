@@ -445,8 +445,10 @@ class ImagePopulation {
 
 
     TEST(target_solution) {
-        let total_differences = 0;
+        console.log(target_solution.pixels.length, target_solution.pixels[0].length, target_solution.pixels[0][0].length);
+        console.log(this.solutions[0].pixels.length, this.solutions[0].pixels[0].length, this.solutions[0].pixels[0][0].length);
 
+        let total_differences = 0;
         for(let i=0; i<200; i++) {
             for(let j=0; j<300; j++) {
                 for(let k=0; k<4; k++) {
@@ -523,7 +525,7 @@ class ImagePopulation {
         *-----------------------------------------------------------*/
         // Kernel : difference between two 3D matrices and a reference matrix
         const differenceKernel_3D_matrices_reference = gpu.createKernel(function(matrices, reference) {
-            return Math.abs(matrices[this.thread.z][this.thread.y][this.thread.x] - reference[this.thread.y][this.thread.x]);    
+            return Math.abs(matrices[this.thread.z][this.thread.y][this.thread.x] - reference[this.thread.y][this.thread.x]);
         })
         .setOutput([8, 2, 5]);
         // Kernel : sums of all differences
