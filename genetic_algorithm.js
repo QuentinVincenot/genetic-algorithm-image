@@ -529,9 +529,9 @@ class ImagePopulation {
         // Kernel : sums of all differences
         const sumKernel_differences = gpu.createKernel(function(differences) {
             let sum = 0;
-            for(let i=0; i<8; i++) {
-                for(let j=0; j<2; j++) {
-                    sum += differences[this.thread.z][j][i];
+            for(let i=0; i<2; i++) {
+                for(let j=0; j<8; j++) {
+                    sum += differences[this.thread.z][i][j];
                 }
             }
             return sum;
