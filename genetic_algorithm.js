@@ -449,7 +449,7 @@ class ImagePopulation {
                 batched_solutions.push(this.solutions[end_batch].pixels);
                 element_index++;
             }
-            while(batch_fitnesses.length < 5) {
+            while(batched_solutions.length < 5) {
                 batched_solutions.push(this.solutions[end_batch].pixels);
             }
 
