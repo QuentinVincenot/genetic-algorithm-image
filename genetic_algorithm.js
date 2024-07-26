@@ -524,9 +524,13 @@ class ImagePopulation {
         // Kernel : difference between two 3D matrices and a reference matrix
         const differenceKernel_3D_matrices_reference = gpu.createKernel(function(matrices, reference) {
             // Calculate the fitness of each solution by comparing with the target solution
-            return Math.abs(matrices[this.thread.w][this.thread.z][this.thread.y][this.thread.x] - reference[this.thread.z][this.thread.y][this.thread.x]);
+            let sum = 0;
+            for(let k=0; k<4; k++) {
+                sum += Math.abs(matrices[this.thread.w][this.thread.z][this.thread.y][k] - reference[this.thread.z][this.thread.y][k]);    
+            }
+            return sum;
         })
-        .setOutput([4, 2, 2, 5]);
+        .setOutput([2, 2, 5]);
         // Test data for differenceKernel_3D_matrices_reference
         const solutions = [
             [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
