@@ -211,7 +211,7 @@ class ImagePopulation {
 
         // Crée un kernel pour sommer les différences
         this.batched_sumKernel = gpu.createKernel(function(differences) {
-            const w = this.thread.w;  // Index pour les matrices
+            const w = this.thread.x;  // Index pour les matrices
             let sum = 0;
             for (let i = 0; i < 200; i++) {
                 for (let j = 0; j < 300; j++) {
