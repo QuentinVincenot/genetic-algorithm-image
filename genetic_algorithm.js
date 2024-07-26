@@ -515,6 +515,31 @@ class ImagePopulation {
         const differences_r = differenceKernel_2D_matrices_reference(matrices, reference);
         console.timeEnd('differenceKernel_2D_matrices_reference');
         console.log('differenceKernel_2D_matrices_reference :', differences_r);
+
+
+
+        /*----------------------------------------------------------
+        *--- differenceKernel_3D_matrices_reference
+        *-----------------------------------------------------------*/
+        // Kernel : difference between two 3D matrices and a reference matrix
+        const differenceKernel_3D_matrices_reference = gpu.createKernel(function(matrices, reference) {
+            // Calculate the fitness of each solution by comparing with the target solution
+            return Math.abs(matrices[this.thread.w][this.thread.z][this.thread.y][this.thread.x] - reference[this.thread.z][this.thread.y][this.thread.x]);
+        })
+        .setOutput([4, 2, 2, 5]);
+        // Test data for differenceKernel_3D_matrices_reference
+        const solutions = [
+            [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
+            [[[120, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
+            [[[140, 137, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
+            [[[140, 127, 60, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]],
+            [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]]
+        ];
+        const target = [[[140, 127, 50, 255], [140, 127, 50, 255]], [[140, 127, 50, 255], [140, 127, 50, 255]]];
+        console.time('differenceKernel_3D_matrices_reference');
+        const differences_r2 = differenceKernel_3D_matrices_reference(solutions, target);
+        console.timeEnd('differenceKernel_3D_matrices_reference');
+        console.log('differenceKernel_3D_matrices_reference :', differences_r2);
     }
 
 
