@@ -469,7 +469,7 @@ class ImagePopulation {
 
             j = end_batch;
         }
-        for (let i = 0; i < this.solutions.length; i++) {
+        for (let i = 0; i < j; i++) {
             this.solutions_fitness.push(fitnesses[i]);
         }
         console.log('batched fitnesses :', fitnesses);
