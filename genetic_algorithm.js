@@ -26,11 +26,13 @@ function flatten_matrices(matrices) {
     const numRows = 200;
     const numCols = 300;
     const numChannels = 4;
-    const transformed = Array.from({ length: numMatrices }, () =>
-        Array.from({ length: numRows }, () =>
-            Array(numCols * numChannels).fill(0)
+    
+    const transformed = new Array(numMatrices).fill(0).map(() =>
+        new Array(numRows).fill(0).map(() =>
+            new Array(numCols * numChannels).fill(0)
         )
     );
+
     for (let m = 0; m < numMatrices; m++) {
         for (let i = 0; i < numRows; i++) {
             for (let j = 0; j < numCols; j++) {
