@@ -3,12 +3,6 @@ import { /*calculateAndSumDifferences, evaluateFitnessForPopulation,*/ differenc
 
 const gpu = new GPU();
 
-/*const differenceKernel = gpu.createKernel(function(array1, array2) {
-    // Calculate the fitness of each solution by comparing with the target solution
-    return array1[this.thread.x] - array2[this.thread.x];
-})
-.setOutput([10]);*/
-
 /*const diffMatricesKernel = gpu.createKernel(function(matrix1, matrix2) {
     // Calculate the fitness of each solution by comparing with the target solution
     return matrix1[this.thread.x][this.thread.y] - matrix2[this.thread.x][this.thread.y];
@@ -348,6 +342,8 @@ class ImagePopulation {
 
         this.TEST(target_solution);
 
+        TEST_GPU_JS();
+
         /*// Convertir les solutions en format compatible pour GPU
         const target_pixels = target_solution.pixels;
 
@@ -361,11 +357,6 @@ class ImagePopulation {
         
         
         
-        /*const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-        const array2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
-        const differences = differenceKernel(array1, array2);
-        console.log(differences);*/
-
         /*const matrix1 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
         const matrix2 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
         const differences = diffMatricesKernel(matrix1, matrix2);
@@ -535,6 +526,20 @@ class ImagePopulation {
         }
 
         console.log('*** TEST *** :', total_differences);
+    }
+
+
+    TEST_GPU_JS() {
+        // Kernel : difference between two 1D arrays
+        const differenceKernel_1D_arrays = gpu.createKernel(function(array1, array2) {
+            return Math.abs(array1[this.thread.x] - array2[this.thread.x]);
+        })
+        .setOutput([10]);
+        // Test data for difference kernel
+        const array1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const array2 = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+        const differences = differenceKernel_1D_arrays(array1, array2);
+        console.log('differenceKernel_1D_arrays :', differences);
     }
 
 
