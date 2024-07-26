@@ -437,10 +437,29 @@ class ImagePopulation {
         let j=0;
         while(j < this.solutions.length) {
             console.time('batched_diffKernel');
+
+            let batched_solutions = [];
+
+            let start_batch = j;
+            let end_batch = Math.min(j+5, this.solutions.length);
+
+            let element_index = start_batch;
+            while(element_index < end_batch) {
+                batched_solutions.push(this.solutions[end_batch].pixels);
+                element_index++;
+            }
+
+            
+            /*let end_batch = j;
+            while(end_batch < this.solutions.length) {
+                batched_solutions.push(this.solutions[end_batch].pixels);
+                end_batch++;
+            }
+
             let batched_solutions = [
                 this.solutions[j].pixels, this.solutions[j+1].pixels, this.solutions[j+2].pixels,
                 this.solutions[j+3].pixels, this.solutions[j+4].pixels
-            ];
+            ];*/
 
             const flattened_batch = flatten_matrices(batched_solutions);
             const flattened_target = flatten_solution(target_solution.pixels)
@@ -455,7 +474,7 @@ class ImagePopulation {
             }
             console.timeEnd('batched_sumKernel');
 
-            j = Math.min(j+5, this.solutions.length);
+            j = end_batch;
         }
         console.log(fitnesses);
 
