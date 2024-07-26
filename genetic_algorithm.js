@@ -442,10 +442,11 @@ class ImagePopulation {
 
             let start_batch = j;
             let end_batch = Math.min(j+5, this.solutions.length);
-            console.log(start_batch, end_batch);
+            console.log(start_batch, end_batch, this.solutions.length);
 
             let element_index = start_batch;
-            while(element_index < end_batch - 1) {
+            while(element_index < end_batch) {
+                console.log(element_index);
                 batched_solutions.push(this.solutions[end_batch].pixels);
                 element_index++;
             }
