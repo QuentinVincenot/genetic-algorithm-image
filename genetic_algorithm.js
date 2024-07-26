@@ -415,13 +415,14 @@ class ImagePopulation {
 
         console.time('fitness_computation');
         let fitnesses = [];
+        this.solutions_fitness = [];
         for (let i = 0; i < this.solutions.length; i++) {
 
             const pixels_differences = this.diffKernel(this.solutions[i].pixels, target_solution.pixels);
             const fitness = this.sumKernel(pixels_differences)[0];
 
             fitnesses.push(fitness);
-            this.solutions_fitness[i] = fitness;
+            this.solutions_fitness.push(fitness);
         }
         console.log('raw fitnesses :', fitnesses);
         console.log('raw solutions fitnesses :', this.solutions_fitness);
@@ -431,6 +432,7 @@ class ImagePopulation {
 
         console.time('batched_fitness_computation');
         fitnesses = [];
+        this.solutions_fitness = [];
         let j=0;
         while(j < this.solutions.length) {
 
@@ -468,7 +470,7 @@ class ImagePopulation {
             j = end_batch;
         }
         for (let i = 0; i < this.solutions.length; i++) {
-            this.solutions_fitness[i] = fitnesses[i];
+            this.solutions_fitness.push(fitnesses[i]);
         }
         console.log('batched fitnesses :', fitnesses);
         console.log('batched solutions fitnesses :', this.solutions_fitness);
