@@ -22,25 +22,19 @@ const gpu = new GPU();
 .setOutput([5, 3, 3]);*/
 
 function flatten_matrices(matrices) {
-    // Obtenez les dimensions
-    const numMatrices = matrices.length;       // 2 matrices
-    const numRows = matrices[0].length;        // 2 lignes
-    const numCols = matrices[0][0].length;     // 2 colonnes
-    const numChannels = matrices[0][0][0].length; // 4 canaux
-
-    // Créez une nouvelle matrice de sortie
+    const numMatrices = 5;
+    const numRows = 200;
+    const numCols = 300;
+    const numChannels = 4;
     const transformed = Array.from({ length: numMatrices }, () =>
         Array.from({ length: numRows }, () =>
-            Array(numCols * numChannels).fill(0) // Créer un tableau de taille 8 pour chaque cellule
+            Array(numCols * numChannels).fill(0)
         )
     );
-
-    // Remplir la nouvelle matrice
     for (let m = 0; m < numMatrices; m++) {
         for (let i = 0; i < numRows; i++) {
             for (let j = 0; j < numCols; j++) {
                 for (let k = 0; k < numChannels; k++) {
-                    // Concaténer les canaux des matrices dans la nouvelle matrice
                     transformed[m][i][j * numCols + k] = matrices[m][i][j][k];
                 }
             }
@@ -462,7 +456,7 @@ class ImagePopulation {
 
             const batch_fitnesses = this.batched_sumKernel(pixels_differences);
             console.log('batch_fitnesses', batch_fitnesses);
-            
+
             console.log(batch_fitnesses);
             for(let fi=0; fi<batch_fitnesses.length; fi++) {
                 fitnesses.push(batch_fitnesses[fi]);
